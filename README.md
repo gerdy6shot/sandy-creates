@@ -1,5 +1,9 @@
 # Sandy Creates
 
+Source repository: https://github.com/gerdy6shot/sandy-creates
+
+**Deployment target: Cloudflare Pages.** The existing Sites URL is an earlier review preview, not the deployment target for future releases. No GitHub-to-Cloudflare automatic deployment has been configured.
+
 A NEW, standalone Sandy Creates application. No code, assets, credentials, database project or deployment from the earlier Cynthia Horner project is reused.
 
 ## Current release
