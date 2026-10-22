@@ -43,3 +43,11 @@
 - sandycreates.com DNS/custom-domain setup, production policy approval and public launch.
 
 A frontend build is not proof of production readiness. A local SQL test is not a remote migration or provider acceptance test.
+
+## Supplied-product photography update
+
+- Integrated IMG_6721.jpg, IMG_6723.jpg and IMG_6724.jpg as unchanged image files for SofriDOBO, Sol Shine and Yardie Glaze. CSS frames hide social interface controls at the edges.
+- Replaced the original fictional public catalog; no sample prices, sizes, stock or sold-out claims are attached to the supplied products.
+- Existing demo catalog migration preserves unrelated studio edits. Added regression coverage for migration and price-pending bag exclusion.
+- Updated suite: 20 tests passed. Type-check, lint and production build passed.
+- Browser verified each of the three detail pages at 390 and 1440 px: photographs loaded, no horizontal overflow, prices pending, buying disabled, no visible $0.00. Console warning/error check returned no entries.

@@ -1,7 +1,7 @@
 # Owner decisions and launch gates
 
 ## Brand and content
-- Supply original Spice Gurl mortar-and-pestle logo, exact green, packaging files and approved photography. Current text treatment and concept bowls are placeholders, not official brand artwork.
+- Three Spice Gurl product photographs are supplied and integrated. Supply standalone mortar-and-pestle logo, exact green and original packaging files. Current text treatment and concept bowls are placeholders, not official brand artwork.
 - Instagram screenshots were referenced in the brief but not attached in this session. Stock photographs are labeled and attributed in assets.json.
 - Approve homepage/About copy. No education, heritage, family anecdotes, founding dates, awards or catering credentials have been invented.
 - Confirm product names, recipes, SKUs, sizes, integer prices, ingredients, allergens, storage, legal sale eligibility and approved image rights.

@@ -4,7 +4,7 @@ A NEW, standalone Sandy Creates application. No code, assets, credentials, datab
 
 ## Current release
 
-Presentation demo: complete public routes, sample Spice Gurl store, persistent demo bag, culinary inquiry pathways, experiences empty states, contact validation, policy drafts and an editable local demo studio. The shipped UI ALWAYS uses synthetic demo data. It does not take payments, save inquiries, subscribe emails or access live customer records. The persistent preview banner makes this explicit.
+Presentation demo: complete public routes, Spice Gurl product showcase with supplied photographs, persistent demo bag, culinary inquiry pathways, experiences empty states, contact validation, policy drafts and an editable local demo studio. The shipped UI ALWAYS uses synthetic demo data. It does not take payments, save inquiries, subscribe emails or access live customer records. The persistent preview banner makes this explicit.
 
 React 19, TypeScript, Vite 7, React Router, Tailwind 4, custom editorial design tokens, and Lucide icons. npm and package-lock.json. Node 22.17+ recommended (tests use Node's experimental TypeScript stripping).
 
@@ -44,7 +44,7 @@ npm run preview
 
 ## Content and assets
 
-All copy is editable draft, not Sandy's approved quotations. Product names, prices, sizes and ingredients are sample concepts. No invented reviews, credentials, discounts or business address. Portrait is an intentional replacement slot. Spice Gurl uses a temporary text treatment; no official logo/packaging is fabricated.
+All copy is editable draft, not Sandy's approved quotations. SofriDOBO, Sol Shine and Yardie Glaze use the supplied packaging photographs and readable label names. Their prices, sizes, ingredients and availability remain unconfirmed; buying controls are disabled and no sample prices are attached to these products. No invented reviews, credentials, discounts or business address. Portrait is an intentional replacement slot. Spice Gurl uses a temporary text treatment; no official logo/packaging is fabricated.
 
 Replace stock images in `public/images/` with approved images and update meaningful alt text. Product photo previews in the demo studio accept JPEG/PNG/WebP under 2 MB; production bucket restrictions are also prepared. Never upload private images to the proposed public product-image bucket.
 
@@ -67,3 +67,7 @@ The private Sites preview serves only the built static demo (`.openai/hosting.js
 For a future Cloudflare Pages deployment: build command `npm run build`, output `dist`, npm lockfile, Node 22. Deploy from this project root so `functions/` is included if approved. Nested routes use `public/_redirects`; `_headers` supplies baseline headers. Configure server secrets in Pages, not VITE_ variables. Provider runtime and Pages Functions behavior require staging verification.
 
 Before enabling a live service, implement its UI integration, review operating rules, apply schema in staging, test RLS/Auth/Storage/provider webhooks, then approve launch. The preview's `robots.txt`, robots meta and X-Robots-Tag deliberately disable indexing. Production sitemap/canonical and social image require approved live routing/domain/assets; the supplied primary domain is sandycreates.com but is not connected by this release.
+
+## Product photography update
+
+The three supplied product images replace the original fictional catalog in the homepage collection, shop and detail pages. Catalog version 2 replaces retired starter products for returning browsers while preserving unrelated local content/events/settings/custom-product edits. Prior starter variants are removed from the demo bag. Individual original image files live in `public/images/products/`. Public product details intentionally withhold unapproved sale information.

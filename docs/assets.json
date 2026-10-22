@@ -19,5 +19,23 @@
     "source": "https://unsplash.com/photos/sXqTwzUahmo",
     "license": "Unsplash License",
     "use": "Stock mood photograph. Not Sandy\u2019s products, cooking, or work."
+  },
+  {
+    "file": "products/sofridobo.jpg",
+    "source": "IMG_6721.jpg",
+    "author": "User-supplied Spice Gurl product image",
+    "use": "Supplied for Sandy Creates preview. Source image and packaging preserved; social-interface edges clipped by CSS only. No invented price, size, ingredients, stock or claim."
+  },
+  {
+    "file": "products/sol-shine.jpg",
+    "source": "IMG_6723.jpg",
+    "author": "User-supplied Spice Gurl product image",
+    "use": "Supplied for Sandy Creates preview. Source image and packaging preserved; social-interface edges clipped by CSS only. No invented price, size, ingredients, stock or claim."
+  },
+  {
+    "file": "products/yardie-glaze.jpg",
+    "source": "IMG_6724.jpg",
+    "author": "User-supplied Spice Gurl product image",
+    "use": "Supplied for Sandy Creates preview. Source image and packaging preserved; social-interface edges clipped by CSS only. No invented price, size, ingredients, stock or claim."
   }
 ]
