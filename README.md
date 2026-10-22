@@ -2,7 +2,7 @@
 
 Source repository: https://github.com/gerdy6shot/sandy-creates
 
-**Deployment target: Cloudflare Pages.** The existing Sites URL is an earlier review preview, not the deployment target for future releases. No GitHub-to-Cloudflare automatic deployment has been configured.
+**Deployment target: Cloudflare Pages.** The existing Sites URL is an earlier review preview, not the deployment target for future releases. Cloudflare Pages project `sandy-creates` deploys automatically from GitHub `main` at https://sandy-creates.pages.dev.
 
 A NEW, standalone Sandy Creates application. No code, assets, credentials, database project or deployment from the earlier Cynthia Horner project is reused.
 
@@ -68,7 +68,7 @@ Notification jobs are saved transactionally with inquiries or payments. `runMain
 
 The private Sites preview serves only the built static demo (`.openai/hosting.json`). Sites handles owner access separately from future customer/admin authentication. No custom domain has been connected.
 
-For a future Cloudflare Pages deployment: build command `npm run build`, output `dist`, npm lockfile, Node 22. Deploy from this project root so `functions/` is included if approved. Nested routes use `public/_redirects`; `_headers` supplies baseline headers. Configure server secrets in Pages, not VITE_ variables. Provider runtime and Pages Functions behavior require staging verification.
+Cloudflare Pages configuration: build command `npm run build`, output `dist`, npm lockfile, Node 22. Deploy from this project root so `functions/` is included if approved. Nested routes use the native Pages SPA fallback (no top-level `404.html`); `_headers` supplies baseline headers. Configure server secrets in Pages, not VITE_ variables. Provider runtime and Pages Functions behavior require staging verification.
 
 Before enabling a live service, implement its UI integration, review operating rules, apply schema in staging, test RLS/Auth/Storage/provider webhooks, then approve launch. The preview's `robots.txt`, robots meta and X-Robots-Tag deliberately disable indexing. Production sitemap/canonical and social image require approved live routing/domain/assets; the supplied primary domain is sandycreates.com but is not connected by this release.
 
