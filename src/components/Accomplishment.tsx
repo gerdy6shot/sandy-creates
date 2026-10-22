@@ -1,0 +1,8 @@
+import { pieAccomplishment as pie } from '../data/accomplishments';
+import { TextLink } from './Shared';
+export function AwardPhoto({src,alt,portrait=false,caption}:{src:string;alt:string;portrait?:boolean;caption?:string}){
+ return <figure className={`award-photo ${portrait?'award-portrait':'award-pie'}`}><div className="award-photo-window"><img src={src} alt={alt} loading="lazy" width={1206} height={portrait?2072:1222}/></div>{caption&&<figcaption>{caption}</figcaption>}</figure>;
+}
+export default function Accomplishment({compact=false}:{compact?:boolean}){
+ return <section id={compact?'sandy-recognition':pie.id} className={`section accomplishment-section ${compact?'compact':''}`} aria-labelledby={compact?'recognition-title':'pie-title'}><div className="accomplishment-story"><AwardPhoto {...pie.portrait} portrait caption="Sandy with her second-place ribbon."/><div className="body-copy"><p className="eyebrow">{pie.eyebrow}</p><h2 id={compact?'recognition-title':'pie-title'}>{pie.title.split('\n').map((line,index)=><span className={index?'accomplishment-italic':''} key={line}>{line}</span>)}</h2><p className="recognition-line">{pie.recognition}</p><p>{pie.description}</p>{!compact&&<p>{pie.story}</p>}<p className="caption accomplishment-source">Shared by Sandy on @spicegurlofficial.</p>{compact?<TextLink to="/culinary#pie-ribbon">See the pie & the story</TextLink>:<p className="small-copy accomplishment-order-note">A culinary accomplishment, shared as part of Sandy’s story. This pie is not currently offered for ordering.</p>}</div></div>{!compact&&<div className="accomplishment-gallery">{pie.gallery.map(photo=><AwardPhoto key={photo.src} {...photo}/>)}</div>}</section>;
+}

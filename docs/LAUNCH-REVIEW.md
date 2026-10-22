@@ -25,3 +25,7 @@
 - Culinary transactional capacity reservations and paid event reservations are NOT implemented; keep disabled until approved operating rules exist.
 - Schedule expired-reservation release and notification retries with server-only credentials; no scheduler has been provisioned.
 - Confirm rights, policies and business rules before indexing or public launch. Set canonical/sitemap to sandycreates.com only when that domain serves the approved live site.
+
+## Pie accomplishment supplied by owner
+- IMG_6730.jpg includes Sandy with a second-place ribbon and the @spicegurlofficial caption reporting second place in her first-ever Blue Ribbon Contest. IMG_6731.jpg and IMG_6732.jpg show the accompanying pie.
+- This supplied account supports the limited accomplishment wording on About and Culinary. No contest date, specific organizer/official event name or pie name is published. Confirm those details before expanding the story. No recipe/ingredient/allergen or ordering claims inferred from the photographs.

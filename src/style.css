@@ -20,3 +20,24 @@
 .cart-line .product-art.supplied-product{aspect-ratio:4/5}
 .spice-section .product-card>a:hover .supplied-product,.product-card>a:hover .product-art.supplied-product{background:#000}
 @media(max-width:600px){.spice-section .product-grid .product-card:last-child{grid-column:auto;max-width:none}.spice-section .product-grid{grid-template-columns:1fr}.spice-section .product-art.supplied-product{aspect-ratio:4/5}.shop-section .product-grid{grid-template-columns:1fr}.product-art.supplied-product img{width:auto;height:100%}}
+.accomplishment-section{background:#eee8dc;max-width:none;scroll-margin-top:55px}
+.accomplishment-story{display:grid;grid-template-columns:.9fr 1.1fr;gap:7vw;align-items:center}
+.award-photo{margin:0;min-width:0}
+.award-photo-window{position:relative;overflow:hidden;background:#e4ddce;aspect-ratio:1}
+.award-photo img{display:block;width:100%;height:auto;max-width:none}
+/* Crop only the page viewport: source photographs remain unchanged.
+   Portrait: show the photograph above the caption, excluding social controls.
+   Pie frames: exclude the corner carousel/audio overlays. */
+.award-portrait .award-photo-window{aspect-ratio:1}
+.award-portrait img{position:absolute;width:132%;left:-16%;top:-15%}
+.award-pie .award-photo-window{aspect-ratio:1.15}
+.award-pie img{position:absolute;width:125%;left:-12.5%;top:-16%}
+.award-photo figcaption{font-size:10px;line-height:1.7;color:#655c4e;margin-top:12px}
+.accomplishment-section .recognition-line{font:11px/1.7 Arial,sans-serif!important;letter-spacing:.06em;color:#82431e!important;border-top:1px solid #b7a58e;padding-top:18px}
+.accomplishment-source{font:10px/1.7 Arial,sans-serif!important;color:#665b4a!important}
+.accomplishment-order-note{font:11px/1.8 Arial,sans-serif!important;border-top:1px solid #c8bca9;padding-top:18px}
+.accomplishment-gallery{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:55px}
+.accomplishment-section h2{font-size:clamp(35px,4vw,62px)}
+@media(max-width:600px){.accomplishment-story{grid-template-columns:1fr;gap:35px}.accomplishment-gallery{grid-template-columns:1fr;gap:30px;margin-top:35px}.accomplishment-section h2{font-size:43px}}
+
+.accomplishment-section h2>span{display:block}.accomplishment-italic{font-style:italic}

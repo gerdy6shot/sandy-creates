@@ -71,3 +71,7 @@ Before enabling a live service, implement its UI integration, review operating r
 ## Product photography update
 
 The three supplied product images replace the original fictional catalog in the homepage collection, shop and detail pages. Catalog version 2 replaces retired starter products for returning browsers while preserving unrelated local content/events/settings/custom-product edits. Prior starter variants are removed from the demo bag. Individual original image files live in `public/images/products/`. Public product details intentionally withhold unapproved sale information.
+
+## Pie accomplishment
+
+`src/data/accomplishments.ts` contains typed, source-attributed content for Sandy’s second-place result in her first Blue Ribbon Contest, reported in the supplied @spicegurlofficial post. The reusable feature appears on About and Culinary with her ribbon portrait and both pie photographs. Exact contest identity/date and pie name remain unset. Source images are preserved in `public/images/accomplishments/`; CSS crops the social-interface edges. The feature is editorial, not an orderable menu item.

@@ -51,3 +51,7 @@ A frontend build is not proof of production readiness. A local SQL test is not a
 - Existing demo catalog migration preserves unrelated studio edits. Added regression coverage for migration and price-pending bag exclusion.
 - Updated suite: 20 tests passed. Type-check, lint and production build passed.
 - Browser verified each of the three detail pages at 390 and 1440 px: photographs loaded, no horizontal overflow, prices pending, buying disabled, no visible $0.00. Console warning/error check returned no entries.
+
+## Pie accomplishment update
+
+Added source-attributed second-place/first Blue Ribbon Contest story on About and Culinary, with the three supplied images. No exact contest name/date, pie name, price or purchase availability inferred. Original files unchanged; social controls excluded by page framing. Browser checks at 390 and 1440 px confirmed both pages, expected portrait/gallery counts, no overflow, no broken loaded feature images and no captured warning/error logs. Type-check, lint and production build passed. Existing database/payment tests were not rerun for this editorial-only update.
