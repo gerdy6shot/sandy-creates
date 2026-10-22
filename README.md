@@ -75,3 +75,7 @@ The three supplied product images replace the original fictional catalog in the 
 ## Pie accomplishment
 
 `src/data/accomplishments.ts` contains typed, source-attributed content for Sandy’s second-place result in her first Blue Ribbon Contest, reported in the supplied @spicegurlofficial post. The reusable feature appears on About and Culinary with her ribbon portrait and both pie photographs. Exact contest identity/date and pie name remain unset. Source images are preserved in `public/images/accomplishments/`; CSS crops the social-interface edges. The feature is editorial, not an orderable menu item.
+
+## Confirmed profile and education
+
+`src/data/profile.ts` is the reusable profile source. The owner confirmed a bachelor’s degree in Culinary Arts from Johnson & Wales University. It appears once in the About narrative and once briefly in the Home introduction; there are no credential badges or sitewide repetitions. No BS/BA designation, graduation date, coursework or academic achievements are inferred. The same source contains a reusable professional bio, also supplied in `docs/PROFESSIONAL-BIO.md`. The new portrait comes from IMG_6734.jpg, preserved in `public/images/sandy/profile.jpg`, and replaces the Home/About placeholder artwork.

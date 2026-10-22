@@ -3,9 +3,9 @@
 ## Brand and content
 - Three Spice Gurl product photographs are supplied and integrated. Supply standalone mortar-and-pestle logo, exact green and original packaging files. Current text treatment and concept bowls are placeholders, not official brand artwork.
 - Instagram screenshots were referenced in the brief but not attached in this session. Stock photographs are labeled and attributed in assets.json.
-- Approve homepage/About copy. No education, heritage, family anecdotes, founding dates, awards or catering credentials have been invented.
+- Approve homepage/About copy. Education wording is owner-confirmed: bachelor’s degree in Culinary Arts from Johnson & Wales University. No additional degree designation, graduation date, coursework or honors inferred. Heritage, family anecdotes, founding dates and catering credentials remain unverified.
 - Confirm product names, recipes, SKUs, sizes, integer prices, ingredients, allergens, storage, legal sale eligibility and approved image rights.
-- Confirm biography, event descriptions and personal portrait. No family photographs used.
+- Confirm remaining biography and event descriptions. The supplied IMG_6734.jpg is now used as Sandy’s Home/About portrait. No family photographs used.
 
 ## Operations
 - Confirm business identity and contact address. Gainesville, Georgia is not published as a fulfillment promise.

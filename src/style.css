@@ -41,3 +41,8 @@
 @media(max-width:600px){.accomplishment-story{grid-template-columns:1fr;gap:35px}.accomplishment-gallery{grid-template-columns:1fr;gap:30px;margin-top:35px}.accomplishment-section h2{font-size:43px}}
 
 .accomplishment-section h2>span{display:block}.accomplishment-italic{font-style:italic}
+.sandy-portrait{margin:0;min-width:0}
+.sandy-portrait img{display:block;width:100%;height:auto;aspect-ratio:1206/984;object-fit:contain;background:#eae5dc}
+.sandy-portrait figcaption{font-size:10px;line-height:1.7;color:#665b4a;margin-top:12px}
+.intro-section>.sandy-portrait{align-self:center}
+@media(max-width:600px){.sandy-portrait figcaption{font-size:10px}}

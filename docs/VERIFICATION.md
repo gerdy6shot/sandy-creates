@@ -55,3 +55,11 @@ A frontend build is not proof of production readiness. A local SQL test is not a
 ## Pie accomplishment update
 
 Added source-attributed second-place/first Blue Ribbon Contest story on About and Culinary, with the three supplied images. No exact contest name/date, pie name, price or purchase availability inferred. Original files unchanged; social controls excluded by page framing. Browser checks at 390 and 1440 px confirmed both pages, expected portrait/gallery counts, no overflow, no broken loaded feature images and no captured warning/error logs. Type-check, lint and production build passed. Existing database/payment tests were not rerun for this editorial-only update.
+
+## Sandy portrait and education update
+
+- IMG_6734.jpg replaces the Home/About portrait placeholders; source image preserved.
+- Owner confirmed a bachelor’s degree in Culinary Arts. Johnson & Wales University follows the supplied biography named by the owner. No BS/BA designation, graduation date, coursework or honors inferred.
+- Education appears once per Home/About page and in the reusable professional bio (`src/data/profile.ts`, `docs/PROFESSIONAL-BIO.md`), without a promotional badge.
+- Type-check, lint and production build passed. Browser checks on both pages at 390 and 1440 px confirmed portrait loading, no overflow, no old portrait placeholders, and exactly one university mention per page. Captured warning/error log check was empty.
+- No backend changes; database/payment tests were not rerun for this editorial update.
