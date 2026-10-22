@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { normalizeCart, cartTotal, changeQuantity } from '../src/lib/cart.ts';
+import type { Product } from '../src/lib/models.ts';
+import { emptyInquiry, validateInquiry } from '../src/lib/validation.ts';
+import { hmacHex, verifyStripe, readJson } from '../server/security.ts';
+const products=[{id:'p',published:true,variants:[{id:'v',price:1450,inventory:3}]}] as Product[];
+test('bag clamps stock, combines duplicates and rejects malformed local state',()=>{assert.deepEqual(normalizeCart([{variantId:'v',quantity:2},{variantId:'v',quantity:2},{variantId:'fake',quantity:1},{variantId:'v',quantity:-3}],products),[{variantId:'v',quantity:3}]);assert.deepEqual(normalizeCart('bad',products),[]);assert.deepEqual(normalizeCart([{variantId:'v',quantity:1.5}],products),[]);});
+test('bag totals use integer catalog prices, ignoring injected price',()=>{const raw=[{variantId:'v',quantity:2,price:1}];assert.equal(cartTotal(raw,products),2900);assert.deepEqual(changeQuantity(raw,'v',0,products),[]);});
+test('unpublished and sold-out items are excluded',()=>{assert.deepEqual(normalizeCart([{variantId:'v',quantity:1}],[{...products[0],published:false}]),[]);assert.deepEqual(normalizeCart([{variantId:'v',quantity:1}],[{...products[0],variants:[{...products[0].variants[0],inventory:0}]}]),[]);});
+test('inquiries reject invalid required and conditional fields',()=>{assert.ok(validateInquiry(emptyInquiry).email);assert.deepEqual(validateInquiry({...emptyInquiry,name:'Demo Person',email:'demo@example.test',message:'A fictional inquiry for testing.'}),{});assert.ok(validateInquiry({...emptyInquiry,guests:'-1'}).guests);assert.ok(validateInquiry({...emptyInquiry,category:'Injected'}).category);assert.ok(validateInquiry({...emptyInquiry,message:' '.repeat(15)}).message);});
+test('Stripe signatures verify raw bytes and reject replay, tampering and invalid secrets',async()=>{const time=Math.floor(Date.now()/1000);const raw='{"id":"evt_test"}';const signature=await hmacHex('test-secret',`${time}.${raw}`);assert.equal(await verifyStripe(raw,`t=${time},v1=${signature}`,'test-secret'),true);assert.equal(await verifyStripe(raw+' ',`t=${time},v1=${signature}`,'test-secret'),false);assert.equal(await verifyStripe(raw,`t=${time},v1=${signature}`,'wrong-secret'),false);assert.equal(await verifyStripe(raw,`t=${time},v1=${signature}`,'test-secret',(time+301)*1000),false);});
+test('request parsing enforces body limit even without content length',async()=>{await assert.rejects(()=>readJson(new Request('https://example.test',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({message:'x'.repeat(200)})}),100));});

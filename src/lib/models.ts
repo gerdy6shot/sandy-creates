@@ -1,0 +1,9 @@
+export type Variant = {id:string;size:string;price:number;sku:string;inventory:number};
+export type Product = {id:string;slug:string;name:string;category:'Blends'|'Sauces'|'Collections';currency:'USD';short:string;description:string;color:string;image?:string;variants:Variant[];ingredients:string;allergens:string;storage:string;shipping:boolean;pickup:boolean;published:boolean;featured:boolean;demo:true};
+export type Culinary = {slug:string;name:string;category:string;description:string;servings:string;image:string;price?:number;currency?:string;availablePickupDates?:string[];pickupWindows?:string[];orderCutoff?:string;minQuantity:number;leadDays:number;capacityUnits:number;enabled:boolean;allergens:string};
+export type Experience = {id:string;slug:string;title:string;description:string;start:string;end:string;timezone:string;location:string;published:boolean;image:string;status:'upcoming'|'past'};
+export type CartLine = {variantId:string;quantity:number};
+export type Settings = {paused:boolean;culinaryPaused:boolean;timezone:string;capacity:number;leadDays:number;blockedDates:string[];pickupWindows:string[];availabilityMessage:string;responseMessage:string};
+export type InquiryRecord = {id:string;name:string;category:string;message:string;status:'New'|'In progress'|'Closed';notes:string};
+export type SiteContent = {heroTitle:string;heroIntro:string;story:string;philosophy:string};
+export type DemoState = {products:Product[];events:Experience[];settings:Settings;content:SiteContent;inquiries:InquiryRecord[]};
