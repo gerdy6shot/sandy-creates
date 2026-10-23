@@ -1,0 +1,44 @@
+.preorder-storefront{scroll-margin-top:45px}
+.preorder-intro{max-width:340px;font-size:13px;color:#63594c}
+.preorder-note{background:var(--mint);padding:22px 26px;display:flex;align-items:center;gap:35px;margin-bottom:25px}
+.preorder-note>.eyebrow{min-width:145px;color:var(--green)}
+.preorder-note p{font-size:12px;line-height:1.8;max-width:780px}
+.preorder-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:35px;align-items:start}
+.preorder-products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 22px}
+.preorder-product{background:#fffdf8;border:1px solid var(--line);min-width:0}
+.preorder-product.is-selected{border-color:var(--green)}
+.preorder-product-copy{padding:20px}
+.preorder-product-copy>p{font-size:12px;color:#63594c}
+.preorder-product-meta{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:9px;color:var(--green)}
+.preorder-product-meta>span:last-child{display:flex;align-items:center;gap:4px}
+.preorder-product .product-title{margin:13px 0 9px}
+.preorder-product .product-title h3{font-size:31px}
+.preorder-product .preorder-price{font-size:11px;margin:17px 0}
+.preorder-add{width:100%;justify-content:space-between}
+.preorder-quantity{display:flex;align-items:center;gap:12px;min-height:48px}
+.preorder-quantity>button:not(.preorder-remove){border:1px solid var(--line);background:transparent;width:44px;height:44px;display:grid;place-items:center}
+.preorder-quantity output{min-width:20px;text-align:center;font-size:13px}
+.preorder-remove{background:none;border:0;text-decoration:underline;text-underline-offset:4px;font-size:11px;min-height:44px;padding:8px}
+.preorder-photo-note{margin-top:20px}
+.preorder-summary{position:sticky;top:55px;background:var(--cream);border:1px solid var(--line);padding:28px 24px;margin-top:26px;min-width:0}
+.preorder-summary>.eyebrow{margin:20px 0 14px;font-size:8px}
+.preorder-summary h3{font-size:35px}
+.preorder-selection-count{font-size:12px;margin-top:20px;color:var(--green)}
+.preorder-lines{list-style:none;margin:18px 0;padding:0}
+.preorder-lines li{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding:12px 0;font-size:12px}
+.preorder-total{display:flex;justify-content:space-between;gap:12px;font-size:11px;border-top:1px solid var(--line);padding:18px 0}
+.preorder-summary>.button{width:100%;margin:22px 0 15px;gap:14px}
+.preorder-summary>.caption{font-size:10px}
+.preorder-review{border-top:1px solid var(--line);padding-top:20px;margin-bottom:24px}
+.preorder-review h4{font:22px Georgia,serif;margin-bottom:12px}
+.preorder-review>.button{width:100%;gap:15px}
+.preorder-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:35px;border-top:1px solid var(--line);padding-top:45px;margin-top:65px}
+.preorder-steps h3{font-size:28px;margin:15px 0 12px}.preorder-steps p{font-size:12px;color:#63594c}
+@media(max-width:1200px){.preorder-products{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1000px){.preorder-layout{grid-template-columns:minmax(0,1fr) 260px;gap:22px}.preorder-products{grid-template-columns:1fr}.preorder-product .product-art{aspect-ratio:1}.preorder-summary{padding:25px 20px}}
+@media(max-width:600px){.preorder-layout{grid-template-columns:1fr}.preorder-summary{position:static;margin-top:15px;padding:28px}.preorder-note{flex-direction:column;align-items:start;gap:10px;padding:22px}.preorder-steps{grid-template-columns:1fr;gap:35px}.preorder-product .product-art{aspect-ratio:4/5}.preorder-summary h3{font-size:38px}.preorder-storefront .section-heading h2{font-size:46px}.preorder-products{gap:25px}.preorder-product-copy{padding:22px}}
+
+.preorder-mobile-summary{display:none}.preorder-summary.is-reviewing{position:static}#preorder-summary-title{scroll-margin-top:125px}
+@media(max-width:600px){.preorder-mobile-summary{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);font-size:11px;padding:14px 18px;min-height:48px;position:sticky;top:42px;z-index:3}.preorder-mobile-summary span{margin-left:auto;text-decoration:underline;text-underline-offset:4px}}
+
+.preorder-price strong{font:25px Georgia,serif;color:var(--ink)}.preorder-price>span{display:block;font-size:10px;margin-top:6px}.preorder-checkout-details{font-size:11px;line-height:1.7;margin:15px 0}.preorder-checkout-details>div{margin-bottom:12px}.preorder-checkout-details dt{font-weight:bold}.preorder-checkout-details dd{margin:0;color:#63594c}.preorder-review>.button{margin-top:18px}.preorder-photo-note a{text-decoration:underline;text-underline-offset:3px}
