@@ -1,40 +1,33 @@
-# Spice Gurl paid preorder storefront review
+# Spice Gurl email preorder storefront
 
-The user requested paid preorders. The existing supplied SofriDOBO, Sol Shine and Yardie Glaze photographs are reused without asset edits. New storefront UI is scoped to the Spice Gurl shop and its product detail entry points. It inherits Sandy Creates typography, rust/cream colors and the parent-brand navigation. The prior About business-card feature remains on the branch.
+The storefront reuses the supplied SofriDOBO, Sol Shine and Yardie Glaze photographs. Customers select quantities, review an email draft, and send their preorder request to info@spicegurl.store from their own email app. A copy-request fallback supports customers without a configured email app. Nothing is submitted automatically by the website.
 
-## Verified product prices
+## Published prices
 
-Source: https://www.spicegurl.store/, inspected October 23, 2026. Published product data confirms USD prices and no size options:
+Source: https://www.spicegurl.store/, inspected October 23, 2026. Published USD prices:
 
 - SofriDOBO: $12.00.
-- Sol Shine Sauce (displayed as Sol Shine in this repository): $10.00.
+- Sol Shine Sauce (Sol Shine in this repository): $10.00.
 - Yardie Glaze: $14.00.
 
-The landing page and inspected product descriptions do not specify net weights, bottle volumes or preorder fulfillment dates. Do not infer sizes from the photographs. The public retail stock flags are not preorder capacity commitments and are not reused as such.
+Net weights/bottle sizes and preorder fulfillment dates were not specified in the inspected landing page or product descriptions. Sandy confirms those details, availability, final price and pickup/shipping arrangements directly. Product subtotals are explicitly estimates, excluding taxes and fulfillment costs. No sizes are inferred from photographs.
 
-## Implemented preview
+## Behavior
 
-- Product photographs, prices, category filters, quantity controls, selection/removal and subtotal calculation in integer cents.
-- Mobile selection shortcut and desktop summary.
-- Selection persists through category filtering, but resets on page reload. It is separate from the existing demo bag.
-- Review step displays outstanding size, pickup/shipping and fulfillment-date details.
-- Product detail pages display the same published price and link back to the storefront.
-- Payment button is explicitly disabled. No email request, payment collection, stock reservation or order confirmation is represented as completed.
+- Original product imagery, category filters, quantities from 1–99, removal, and integer-cent subtotal calculations.
+- Desktop selection summary and mobile shortcut to the preorder summary.
+- Selections survive category filtering and reset on reload. They remain separate from the demo shopping bag.
+- Review opens a read-only draft containing canonical product names, selected quantities, published unit prices, estimated subtotal and a request for Sandy to confirm the remaining details. No website customer-data form or browser persistence is introduced.
+- “Open email draft” opens a `mailto:` link. The customer adds their name/notes and sends it themselves. The UI does not claim the message was sent or the order was accepted.
+- The storefront banner and product detail entry points explain email preorders. Other pages retain their existing preview behavior.
+- Sandy Creates remains the parent brand and Spice Gurl its featured product brand.
 
-## Needed to enable real paid preorders
+## Payment boundary
 
-Confirm the three product sizes, preorder availability/capacity and fulfillment date, pickup or shipping options and costs, and the merchant/payment provider to use. Refund/cancellation and tax treatment must accompany the paid offer. No payment account belonging to another project has been reused.
+Payment collection is deferred at the user's request. No Stripe setup, server endpoint, authentication, database, live checkout, stock reservation or order-confirmation changes are included. Emailing a request does not confirm an order or reserve inventory.
 
-Existing backend checkout deliberately remains unavailable. A real integration must create the order and hosted payment session server-side using trusted prices, verify paid webhook events and persist order status. Those changes and provider configuration require the missing commercial details; this commit does not enable checkout by toggling a browser flag.
+## Verification
 
-No server, authentication, database, checkout-result or existing cart source changes were made. No secrets or customer data are added.
+Typecheck, lint, production build and all 22 tests passed. The email-specific tests check canonical quantities/prices, estimated totals, encoding and invalid selections. Browser review checks original images, filters, $34.00 for two SofriDOBO plus one Sol Shine, the recipient and encoded email body, empty-selection behavior and mobile overflow. No test email was sent.
 
-## Validation
-
-- Typecheck, lint, build passed; existing suite: 20 tests passed.
-- Browser: all three original photographs loaded; no horizontal overflow at 1440, 390 and 320 px.
-- Two SofriDOBO plus one Sol Shine correctly totals $34.00. Filtering retains both selections.
-- Quantity decrement/removal clears selections. Review is disabled when empty.
-- Review step renders with payment explicitly disabled.
-
-Branch: `feature/spice-gurl-preorders`. Commit prefix `[CF-Pages-Skip]` preserves review-before-deployment. No merge or deployment has been performed.
+Branch: `feature/spice-gurl-preorders`. Commits use `[CF-Pages-Skip]` to preserve review before deployment. No merge or deployment has been performed.
