@@ -191,3 +191,41 @@ h1,h2,h3{color:#f5edda}
  .sc-shop-stilllife{width:100%;opacity:.3}
 }
 @media(prefers-reduced-motion:reduce){.button{transition:none}}
+
+
+/* OWNER ADMIN: Dark editorial site colors must not wash out text on pale forms.
+   Scoped to administration so the approved public website visuals remain intact. */
+.studio-login .studio-panel,
+.studio-layout {
+  color:#182e25;
+}
+.studio-login .studio-panel {
+  background:#faf8f3;
+}
+.studio-login .studio-panel p,
+.studio-layout .studio-panel p,
+.studio-layout .studio-stats,
+.studio-layout .studio-sidebar,
+.studio-layout .studio-main {
+  color:#20372d;
+}
+.studio-login .studio-panel .small-copy,
+.studio-layout .studio-panel .small-copy {
+  color:#4e5c53;
+}
+.studio-login .studio-panel .eyebrow,
+.studio-layout .studio-panel .eyebrow {
+  color:#78551f;
+}
+.studio-layout h1,
+.studio-layout h2,
+.studio-layout h3 {
+  color:#182e25;
+}
+.studio-login .studio-panel .button,
+.studio-layout .studio-panel .button {
+  color:#082317;
+}
+.studio-login .studio-panel [role="status"] {
+  color:#20372d;
+}
