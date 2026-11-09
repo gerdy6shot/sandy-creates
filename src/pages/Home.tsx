@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ButtonLink, ProductArt } from '../components/Shared';
 import SpiceGurlReactions from '../components/SpiceGurlReactions';
 import { initialDemo } from '../data/demo';
-import { preorderCatalog } from '../data/preorders';
 import { money } from '../lib/cart';
 import { useStore } from '../lib/store';
 
@@ -34,8 +33,10 @@ export default function Home() {
     ? initialDemo.content.heroIntro
     : data.content.heroIntro;
   const featured = data.products.filter(product => product.published && product.featured)
-    .slice(0, 3)
-    .sort((a, b) => featuredOrder.indexOf(a.slug) - featuredOrder.indexOf(b.slug));
+    .sort((a, b) => {
+      const ai=featuredOrder.indexOf(a.slug),bi=featuredOrder.indexOf(b.slug);
+      return (ai<0?1000:ai)-(bi<0?1000:bi);
+    }).slice(0,3);
 
   return <div className="sc-home">
     <section className="sc-home-hero" id="welcome">
@@ -85,7 +86,7 @@ export default function Home() {
         </div>
         <div className="sc-home-products">
           {featured.map(product => {
-            const preorder = preorderCatalog[product.slug];
+            const preorder = (product.variants[0]?.price ?? 0)>0 ? product.variants[0] : null;
             const detail = `/spice-gurl/products/${product.slug}`;
             return <article className="sc-home-product" key={product.id}>
               <Link to={detail} aria-label={`Explore ${product.name}`}>
