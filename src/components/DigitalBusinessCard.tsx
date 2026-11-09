@@ -13,7 +13,7 @@ export default function DigitalBusinessCard() {
           <h2 id="business-card-title">Let’s stay<br /><i>connected.</i></h2>
         </div>
         <div className="about-business-card-intro">
-          <p>Connect with {card.name}, the creator behind Sandy Creates and its featured product brand, {card.brand}.</p>
+          <p>Connect with {card.name}, the creator behind SAN D CREATES and its featured product brand, {card.brand}.</p>
           <p className="about-business-card-specialties">{card.brand} · {card.specialties}</p>
           <p className="about-business-card-location"><MapPin size={14} aria-hidden="true" />{card.location}</p>
         </div>
