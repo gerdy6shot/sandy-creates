@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Check, Mail, Minus, Plus, ShoppingBag } from 'lucide-react';
 import type { Product } from '../lib/models';
 import { money } from '../lib/cart';
@@ -10,7 +10,8 @@ import { sandyBusinessCard } from '../data/business-card';
 import './PreorderStorefront.css';
 
 export default function PreorderStorefront({ products }: { products: Product[] }) {
-  const [category, setCategory] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = ['Blends', 'Sauces'].includes(searchParams.get('category') ?? '') ? searchParams.get('category')! : 'All';
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [reviewing, setReviewing] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
@@ -42,7 +43,7 @@ export default function PreorderStorefront({ products }: { products: Product[] }
       {count > 0 && <a className="preorder-mobile-summary" href="#preorder-summary-title"><ShoppingBag size={16} aria-hidden="true" />{count} {count === 1 ? 'item' : 'items'} · {money(subtotal)} <span>View preorder ↓</span></a>}
       <div className="preorder-layout">
         <div>
-          <div className="filter-bar" aria-label="Filter products">{['All', 'Blends', 'Sauces'].map(value => <button key={value} aria-pressed={category === value} className={category === value ? 'selected' : ''} onClick={() => setCategory(value)}>{value}</button>)}</div>
+          <div className="filter-bar" aria-label="Filter products">{['All', 'Blends', 'Sauces'].map(value => <button key={value} aria-pressed={category === value} className={category === value ? 'selected' : ''} onClick={() => setSearchParams(value === 'All' ? {} : { category: value })}>{value}</button>)}</div>
           <div className="preorder-products">
             {visible.map(product => {
               const quantity = quantities[product.id] ?? 0;
