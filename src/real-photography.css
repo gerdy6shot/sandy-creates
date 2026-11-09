@@ -26,14 +26,12 @@
   position:absolute;
   z-index:2;
   top:7%;
-  left:32%;
+  left:31%;
   width:38%;
-  height:92%;
+  height:86%;
   display:block;
-  object-fit:cover;
-  object-position:50% 28%;
-  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 88%, transparent 100%);
-  mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 88%, transparent 100%);
+  object-fit:contain;
+  object-position:center top;
 }
 .sc-home-hero-collection {
   position:absolute;
@@ -121,7 +119,7 @@
     font-size:17.1vw;
   }
   .sc-home-hero-person {
-    left:22%;
+    left:14%;
     top:17%;
     width:72%;
     height:51%;
@@ -168,7 +166,7 @@
 }
 @media(max-width:480px){
   .sc-home-hero {min-height:710px}
-  .sc-home-hero-person {top:15%;left:9%;width:89%;height:54%}
+  .sc-home-hero-person {top:15%;left:5.5%;width:89%;height:54%}
   .sc-home-hero-collection {bottom:31%;width:56%;height:20%}
   .sc-home-hero-copy {bottom:4.5%}
   .sc-home-hero-signature{top:24%;right:4%}

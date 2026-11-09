@@ -41,8 +41,8 @@ export default function Home() {
     <section className="sc-home-hero" id="welcome">
       <div className="sc-home-hero-visual">
         <span className="sc-home-creates" aria-hidden="true">CREATES</span>
-        <img className="sc-home-hero-person" src="/images/editorial/sandy-portrait-green.jpg"
-          alt="Original portrait of Sandy wearing a burgundy sweater and holding a green drink" fetchPriority="high"/>
+        <img className="sc-home-hero-person" src="/images/editorial/sandy-chef-transparent.png"
+          alt="Sandy in a black chef’s uniform with her hair in a ponytail" width="1206" height="1197" fetchPriority="high"/>
         <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
           alt="Original photograph of the Spice Gurl bottled sauces, seasoning jars, and prepared food" fetchPriority="high"/>
         <img className="sc-home-hero-food" src="/images/editorial/sandy-food-wings.jpg"
