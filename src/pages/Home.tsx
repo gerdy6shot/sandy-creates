@@ -1,17 +1,138 @@
-import SandyPortrait from '../components/SandyPortrait';
-import SpiceGurlReactions from '../components/SpiceGurlReactions';
-import { sandyProfile } from '../data/profile';
+import { ArrowRight, BookOpen, Flame, Heart, Leaf, Soup } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowUpRight } from 'lucide-react';
+import { ButtonLink, ProductArt } from '../components/Shared';
+import SpiceGurlReactions from '../components/SpiceGurlReactions';
+import { initialDemo } from '../data/demo';
+import { preorderCatalog } from '../data/preorders';
+import { money } from '../lib/cart';
 import { useStore } from '../lib/store';
-import { ButtonLink, ProductCard, SectionHeading, TextLink } from '../components/Shared';
-export default function Home(){const {data}=useStore();return <>
-<section className="hero sc-editorial-hero"><span className="sc-hero-word" aria-hidden="true">CREATES</span><span className="sc-hero-smallname" aria-hidden="true">SANDY</span><div className="hero-copy"><p className="eyebrow"><span className="tiny-line"/> FOOD. CULTURE. CREATIVITY.</p><h1>{data.content.heroTitle.split('\n').map((line,i)=><span key={i} className={i===1?'italic':''}>{line}</span>)}</h1><p className="hero-description">{data.content.heroIntro}</p><div className="hero-buttons"><ButtonLink to="/spice-gurl">Explore Spice Gurl</ButtonLink><ButtonLink secondary to="/about">Meet Sandy</ButtonLink></div><div className="hero-footnote"><span className="small-star">✳</span> A creative world, with food at its heart.</div></div><div className="hero-image-wrap"><img className="sc-hero-person" src="/images/editorial/sandy-portrait-green.jpg" alt="Sandy, the creator behind Sandy Creates" width="1206" height="1605" fetchPriority="high" onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/sandy/profile.jpg'; }}/><div className="hero-image-tag"><span>THE GOOD THINGS</span><span>start with a little flavor.</span></div></div><img className="sc-hero-stilllife" src="/images/editorial/spicegurl-collection.jpg" alt="Spice Gurl products and food arranged together" onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/spices.jpg'; }}/><a className="scroll-cue" href="#spice-collection"><ArrowDown size={14}/> A TASTE OF WHAT’S INSIDE</a></section>
-<div className="brand-ribbon"><span>A WORLD BY SANDY</span><span>Spice Gurl</span><span className="ribbon-star">✳</span><span>From the kitchen</span><span className="ribbon-star">✳</span><span>Around the table</span><span className="ribbon-star">✳</span><span>And what’s next</span></div>
-<section className="section spice-section" id="spice-collection"><SectionHeading eyebrow="THE SIGNATURE SPICE COLLECTION" title={<>Featured <i>Products.</i></>} link={{to:'/spice-gurl',label:'Shop all products'}}/><div className="spice-intro"><span className="spice-wordmark">SPICE GURL<span>BY SANDY CREATES</span></span><p>Flavor for the everyday. Inspiration for the unexpected.<br/>Meet SofriDOBO, Sol Shine and Yardie Glaze.</p></div><div className="sc-spice-tabs" aria-label="Browse Spice Gurl collection"><Link to="/spice-gurl">All products</Link><Link to="/spice-gurl?category=Blends">Seasonings</Link><Link to="/spice-gurl?category=Sauces">Sauces &amp; glazes</Link></div><div className="product-grid">{data.products.filter(p=>p.published&&p.featured).slice(0,3).map(p=><ProductCard key={p.id} product={p}/>)}</div><p className="caption">Product photographs supplied for Sandy Creates. Prices, sizes and availability to be confirmed.</p></section>
-<SpiceGurlReactions/><section className="section kitchen-section"><SectionHeading eyebrow="CULINARY / FROM SANDY’S KITCHEN" title={<>Recipes. Culture.<br/><i>Lifestyle.</i></>} link={{to:'/culinary',label:'Explore the culinary hub'}}/><div className="kitchen-editorial"><Link to="/culinary/the-gathering-platter" className="kitchen-main"><img className="sc-culinary-photo" src="/images/editorial/sandy-plated-food.jpg" alt="Sandy’s plated food" loading="lazy" onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/kitchen.jpg'; }}/><div><span className="eyebrow">FOR THE TABLE</span><h3>Something worth gathering for.</h3><ArrowUpRight/></div></Link><div className="kitchen-side"><img className="sc-culinary-photo sc-culinary-photo--side" src="/images/editorial/sandy-food-wings.jpg" alt="Sandy’s glazed chicken wings" loading="lazy" onError={e => { e.currentTarget.onerror = null; e.currentTarget.src = '/images/craft.jpg'; }}/><p className="eyebrow">THE SMALL DETAILS</p><h3>Care in every little thing.</h3><p>Platters, small bites and seasonal ideas. A place to explore what might be on your next table.</p><TextLink to="/contact?category=culinary">Tell us what you have in mind</TextLink></div></div></section>
-<section className="section intro-section" id="welcome"><div className="section-index">01 / THE CREATOR</div><SandyPortrait/><div className="intro-story"><p className="eyebrow">A LITTLE INTRODUCTION</p><h2>The creator<br/>behind <i>the flavor.</i></h2><p>{data.content.story}</p><p>{sandyProfile.homeEducation}</p><TextLink to="/about">A little more about Sandy</TextLink><p className="signature">Sandy</p></div></section>
-<section className="experience-teaser"><span className="experience-asterisk" aria-hidden="true">✳</span><div><p className="eyebrow">04 / EXPERIENCES & CONNECTIONS</p><h2>Something good<br/><i>is coming.</i></h2><p>A table to gather around. An idea to bring to life.<br/>There’s room for a little possibility.</p><TextLink to="/experiences">Explore experiences</TextLink></div><div className="side-note">GOOD FOOD.<br/>OPEN HEARTS.<br/>NEW CONNECTIONS.</div></section>
-<section className="philosophy section"><p className="eyebrow">THE THREAD THAT CONNECTS IT ALL</p><h2>Food is a beginning.<br/><i>Connection is the good part.</i></h2><p>{data.content.philosophy}</p><TextLink to="/contact">Let’s make something good</TextLink></section>
-<section className="newsletter-section"><div><p className="eyebrow">STAY IN GOOD COMPANY</p><h2>Stay close to<br/><i>what’s cooking.</i></h2></div><div><p>For now, find the latest on Sandy’s Instagram. Email updates will open once the mailing list is ready.</p><a className="text-link" href="https://www.instagram.com/san.d.creates/" target="_blank" rel="noreferrer">Follow @san.d.creates <ArrowUpRight size={17}/></a><span className="caption">Newsletter signup is not yet open.</span></div></section>
-</>;}
+
+const collection = '/spice-gurl#preorder-storefront';
+const featuredOrder = ['sofridobo', 'yardie-glaze', 'sol-shine'];
+const productTabs = [
+  { label: 'All products', to: collection },
+  { label: 'Seasonings', to: '/spice-gurl?category=Blends#preorder-storefront' },
+  { label: 'Sauces & glazes', to: '/spice-gurl?category=Sauces#preorder-storefront' },
+];
+const features = [
+  { icon: Leaf, title: 'Bold flavor', description: 'Seasonings, sauces and glazes.' },
+  { icon: Soup, title: 'Chef-crafted', description: 'From Sandy’s culinary world.' },
+  { icon: Flame, title: 'Caribbean roots', description: 'Heritage flavors, modern style.' },
+  { icon: Heart, title: 'Everyday versatility', description: 'From weeknight meals to gatherings.' },
+];
+
+export default function Home() {
+  const { data } = useStore();
+  const title = data.content.heroTitle === 'Made with intention.\nShared with love.'
+    ? initialDemo.content.heroTitle
+    : data.content.heroTitle;
+  const intro = data.content.heroIntro === 'Welcome to Sandy Creates—a home for Spice Gurl, culinary experiences, and everything I’m building next.'
+    ? initialDemo.content.heroIntro
+    : data.content.heroIntro;
+  const featured = data.products.filter(product => product.published && product.featured)
+    .slice(0, 3)
+    .sort((a, b) => featuredOrder.indexOf(a.slug) - featuredOrder.indexOf(b.slug));
+
+  return <div className="sc-home">
+    <section className="sc-home-hero" id="welcome">
+      <svg className="sc-home-creates" viewBox="0 0 1060 220" aria-hidden="true">
+        <text x="0" y="208" textLength="1060" lengthAdjust="spacingAndGlyphs">CREATES</text>
+      </svg>
+      <img className="sc-home-portrait" src="/images/editorial/sandy-portrait-green.jpg"
+        alt="Sandy, the creator behind Sandy Creates" width="1206" height="1605" fetchPriority="high"/>
+      <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
+        alt="Spice Gurl seasonings and sauces alongside a platter of small bites" width="1206" height="1051"/>
+      <img className="sc-home-hero-dish" src="/images/editorial/sandy-food-wings.jpg"
+        alt="Glazed chicken wings from Sandy’s kitchen" width="768" height="1024"/>
+      <div className="sc-home-hero-copy">
+        <h1>{title.split('\n').map((line, index) => <span key={index}>{line}</span>)}</h1>
+        <p>{intro}</p>
+        <div className="sc-home-actions">
+          <ButtonLink to="/culinary">Explore culinary</ButtonLink>
+          <ButtonLink to={collection} secondary>Shop Spice Gurl</ButtonLink>
+        </div>
+      </div>
+      <Link className="sc-home-hero-signature" to="/about" aria-label="Meet Sandy">
+        <span>Founder <b>/</b> Chef <b>/</b> Creator</span>
+        <span className="sc-script">Sandy</span>
+      </Link>
+    </section>
+
+    <section className="sc-home-shop" id="spice-collection" aria-labelledby="sc-featured">
+      <div className="sc-home-collection">
+        <Link className="sc-home-spice-logo" to="/spice-gurl"><Soup aria-hidden="true"/><span>Spice<br/>Gurl</span></Link>
+        <div className="sc-home-collection-copy">
+          <p>The Signature Spice Collection</p>
+          <span>Seasonings, sauces, and culinary essentials inspired by Caribbean roots and global flavor.</span>
+        </div>
+        <ButtonLink to={collection} secondary>Shop all products</ButtonLink>
+      </div>
+      <nav className="sc-home-tabs" aria-label="Browse Spice Gurl products">
+        {productTabs.map(tab => <Link key={tab.label} to={tab.to}>{tab.label}</Link>)}
+      </nav>
+      <div className="sc-home-featured">
+        <div className="sc-home-featured-intro">
+          <h2 id="sc-featured">Featured <br/>Products</h2>
+          <p>Discover Spice Gurl favorites for bold, everyday flavor.</p>
+        </div>
+        <div className="sc-home-products">
+          {featured.map(product => {
+            const preorder = preorderCatalog[product.slug];
+            const detail = `/spice-gurl/products/${product.slug}`;
+            return <article className="sc-home-product" key={product.id}>
+              <Link to={detail} aria-label={`Explore ${product.name}`}><ProductArt product={product}/></Link>
+              <div className="sc-home-product-copy">
+                <h3><Link to={detail}>{product.name}</Link></h3>
+                <p>{product.short}</p>
+                {preorder && <strong>{money(preorder.price)}</strong>}
+                <Link className="button" to={preorder ? collection : detail}>
+                  {preorder ? 'Preorder' : 'View product'}
+                  <span className="sr-only"> {product.name}</span>
+                </Link>
+              </div>
+            </article>;
+          })}
+          <article className="sc-home-product sc-home-product--collection">
+            <Link to={collection} aria-label="Explore the full Spice Gurl collection">
+              <img src="/images/editorial/spicegurl-collection.jpg" alt="Spice Gurl products with a platter of small bites"
+                width="1206" height="1051" loading="lazy"/>
+            </Link>
+            <div className="sc-home-product-copy">
+              <h3><Link to={collection}>Spice Gurl Collection</Link></h3>
+              <p>Explore the full preorder menu.</p>
+              <Link className="button" to={collection}>Shop collection</Link>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <ul className="sc-home-features" aria-label="The Spice Gurl approach">
+      {features.map(({ icon: Icon, title, description }) => <li key={title}>
+        <Icon aria-hidden="true"/><div><strong>{title}</strong><p>{description}</p></div>
+      </li>)}
+    </ul>
+
+    <section className="sc-home-culinary" aria-labelledby="sc-culinary-heading">
+      <img className="sc-home-culinary-image" src="/images/editorial/sandy-plated-food.jpg"
+        alt="Sandy’s plated dish with rice, beef and peppers" width="768" height="1024" loading="lazy"/>
+      <div className="sc-home-culinary-copy">
+        <p className="eyebrow">Culinary lifestyle</p>
+        <h2 id="sc-culinary-heading">Recipes. Culture.<br/>Lifestyle.</h2>
+        <p>Culinary ideas and stories that celebrate food, people, and the power of flavor.</p>
+        <ButtonLink to="/culinary"><BookOpen size={14} aria-hidden="true"/>Explore the culinary hub</ButtonLink>
+      </div>
+    </section>
+
+    <SpiceGurlReactions/>
+
+    <section className="sc-home-follow" aria-labelledby="sc-follow-heading">
+      <span className="sc-script" aria-hidden="true">Sandy Creates</span>
+      <div><h2 id="sc-follow-heading">Stay in the Kitchen with Me</h2>
+        <p>Find new recipes, product updates, and more from Sandy.</p></div>
+      <a className="button" href="https://www.instagram.com/san.d.creates/" target="_blank" rel="noreferrer">
+        Follow on Instagram <ArrowRight size={15} aria-hidden="true"/>
+      </a>
+    </section>
+  </div>;
+}
