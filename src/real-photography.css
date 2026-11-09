@@ -124,6 +124,21 @@
     height:93%;
     object-position:center bottom;
   }
+  /* Leave negative space between Sandy's right arm and the product still life.
+     Keep the collection on the right and fade its left edge before it reaches her. */
+  .sc-home-hero-collection {
+    right:0;
+    width:35%;
+    height:42%;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, transparent 18%, #000 43%),
+      linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
+    -webkit-mask-composite:source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0%, transparent 18%, #000 43%),
+      linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
+    mask-composite:intersect;
+  }
   .sc-home-product .product-art.supplied-product {aspect-ratio:.955}
 }
 @media(max-width:800px) {
