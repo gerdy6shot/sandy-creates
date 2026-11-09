@@ -22,7 +22,7 @@ function Artwork({ className, crop, label, mask }: {
   label: string;
   mask?: 'hero' | 'culinary';
 }) {
-  return <svg className={className} viewBox={crop} role="img" aria-label={label}>
+  return <svg className={className} viewBox={crop} preserveAspectRatio="xMidYMid slice" role="img" aria-label={label}>
     {mask && <defs>
       <filter id={`sc-${mask}-feather`} x="-10%" y="-20%" width="120%" height="140%">
         <feGaussianBlur stdDeviation={mask === 'hero' ? 3 : 6}/>

@@ -157,7 +157,15 @@
   border-right: 1px solid #ba9454;
 }
 
-.sc-home-spice-logo svg { display: block; width: clamp(78px, 14vw, 242px); height: auto; overflow: hidden; }
+.sc-home-spice-logo svg {
+  display: block;
+  width: clamp(78px, 14vw, 242px);
+  height: auto;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent),
+    linear-gradient(0deg, transparent, #000 8%, #000 92%, transparent);
+  mask-composite: intersect;
+}
 .sc-home-collection-copy p { font: italic 400 clamp(20px, 2.2vw, 38px)/1 Georgia, serif; margin-bottom: 4px; }
 .sc-home-collection-copy span { display: block; max-width: 49ch; font-size: clamp(11px, 1.1vw, 16px); line-height: 1.45; }
 .sc-home-collection > .button { border-radius: 6px; }
@@ -268,6 +276,19 @@
   color: #e4d3b1;
   font-size: 11px;
   white-space: nowrap;
+}
+
+@media (min-width: 801px) {
+  .site-header.sc-home-header { background: linear-gradient(#061911 58%, #06191100); }
+  .sc-home-hero { margin-top: calc(-1 * clamp(14px, 2vw, 38px)); }
+  .sc-home-shop { padding-block: .83vw 1.26vw; }
+  .sc-home-collection { margin-bottom: .9vw; }
+  .sc-home-featured { grid-template-columns: minmax(120px, 17.3%) 1fr; padding-top: 1.65vw; }
+  .sc-home-product-art { aspect-ratio: .955; }
+  .sc-home-product-copy { padding-block: 6px 9px; }
+  .sc-home-product-copy p { margin-block: 4px; }
+  .sc-home-product-copy .button { min-height: 26px; padding-block: 5px; }
+  .sc-home-features { padding-block: 13px; }
 }
 
 @media (max-width: 950px) and (min-width: 801px) {
