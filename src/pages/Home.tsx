@@ -45,8 +45,6 @@ export default function Home() {
           alt="Sandy in a black chef’s uniform with her hair in a ponytail" width="1206" height="1197" fetchPriority="high"/>
         <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
           alt="Original photograph of the Spice Gurl bottled sauces, seasoning jars, and prepared food" fetchPriority="high"/>
-        <img className="sc-home-hero-food" src="/images/editorial/sandy-food-wings.jpg"
-          alt="Sandy’s glossy glazed chicken wings" loading="lazy"/>
       </div>
       <div className="sc-home-hero-copy">
         <h1>{title.split('\n').map((line, index) => <span key={index}>{line}</span>)}</h1>
