@@ -4,8 +4,8 @@ import { ArrowUpRight, Check, Mail, Minus, Plus, ShoppingBag } from 'lucide-reac
 import type { Product } from '../lib/models';
 import { money } from '../lib/cart';
 import { ProductArt } from './Shared';
-import { preorderCatalog } from '../data/preorders';
-import { createPreorderDraft } from '../lib/preorder-request';
+
+import { createLivePreorderDraft } from '../lib/preorder-request';
 import { sandyBusinessCard } from '../data/business-card';
 import './PreorderStorefront.css';
 
@@ -15,11 +15,11 @@ export default function PreorderStorefront({ products }: { products: Product[] }
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [reviewing, setReviewing] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
-  const collection = products.filter(p => preorderCatalog[p.slug]);
+  const collection = products.filter(p => p.published && (p.variants[0]?.price ?? 0) > 0);
   const selected = collection.filter(p => quantities[p.id] > 0);
   const count = selected.reduce((sum, p) => sum + quantities[p.id], 0);
-  const subtotal = selected.reduce((sum, p) => sum + preorderCatalog[p.slug].price * quantities[p.id], 0);
-  const draft = selected.length ? createPreorderDraft(selected.map(p => ({ slug: p.slug, quantity: quantities[p.id] }))) : null;
+  const subtotal = selected.reduce((sum, p) => sum + (p.variants[0]?.price ?? 0) * quantities[p.id], 0);
+  const draft = selected.length ? createLivePreorderDraft(selected.map(p => ({ name:p.name, price:p.variants[0]?.price ?? 0, quantity: quantities[p.id] }))) : null;
   const email = sandyBusinessCard.links.find(link => link.kind === 'email')!.href;
   const mailto = draft ? `${email}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}` : email;
   async function copyRequest() {
@@ -37,7 +37,7 @@ export default function PreorderStorefront({ products }: { products: Product[] }
     <section className="section shop-section preorder-storefront" id="preorder-storefront" aria-labelledby="preorder-title">
       <div className="section-heading">
         <div><p className="eyebrow">THE SPICE GURL COLLECTION</p><h2 id="preorder-title">Your next<br /><i>flavor obsession.</i></h2></div>
-        <p className="preorder-intro">Three ways to bring a little more flavor to the table. Explore the collection and choose your favorites.</p>
+        <p className="preorder-intro">Discover the flavors in Sandy’s collection. Explore the collection and choose your favorites.</p>
       </div>
       <div className="preorder-note"><span className="eyebrow">PREORDER BY EMAIL</span><p>Choose your favorites and email your preorder request to Sandy. She’ll confirm sizes, availability, the final price and fulfillment details. No payment or stock reservation is made on this website.</p></div>
       {count > 0 && <a className="preorder-mobile-summary" href="#preorder-summary-title"><ShoppingBag size={16} aria-hidden="true" />{count} {count === 1 ? 'item' : 'items'} · {money(subtotal)} <span>View preorder ↓</span></a>}
@@ -47,7 +47,7 @@ export default function PreorderStorefront({ products }: { products: Product[] }
           <div className="preorder-products">
             {visible.map(product => {
               const quantity = quantities[product.id] ?? 0;
-              const offer = preorderCatalog[product.slug];
+              const offer = product.variants[0];
               return <article className={`preorder-product ${quantity ? 'is-selected' : ''}`} key={product.id}>
                 <Link to={`/spice-gurl/products/${product.slug}`} aria-label={`View ${product.name}`}><ProductArt product={product} /></Link>
                 <div className="preorder-product-copy">
@@ -60,12 +60,12 @@ export default function PreorderStorefront({ products }: { products: Product[] }
             })}
           </div>
           {!visible.length && <p>No products are currently shown in this category.</p>}
-          <p className="caption preorder-photo-note">Original photographs supplied for SAN D CREATES. Prices from <a href="https://www.spicegurl.store/" target="_blank" rel="noopener noreferrer">Spice Gurl’s product listing</a>. Final preorder details are confirmed by Sandy.</p>
+          <p className="caption preorder-photo-note">Original photographs supplied for SAN D CREATES. Current prices are maintained in the owner catalog. Final preorder details are confirmed by Sandy.</p>
         </div>
         <aside className={`preorder-summary ${reviewing ? 'is-reviewing' : ''}`} aria-labelledby="preorder-summary-title">
           <ShoppingBag size={22} strokeWidth={1.4} aria-hidden="true" /><p className="eyebrow">A LITTLE COLLECTION OF FLAVOR</p><h3 id="preorder-summary-title">Your<br /><i>preorder.</i></h3>
           <p className="preorder-selection-count" role="status">{count ? `${count} ${count === 1 ? 'item' : 'items'} selected` : 'Choose your favorites to get started.'}</p>
-          {selected.length > 0 && <ul className="preorder-lines">{selected.map(p => <li key={p.id}><span>{p.name} × {quantities[p.id]}</span><span>{money(preorderCatalog[p.slug].price * quantities[p.id])}</span></li>)}</ul>}
+          {selected.length > 0 && <ul className="preorder-lines">{selected.map(p => <li key={p.id}><span>{p.name} × {quantities[p.id]}</span><span>{money((p.variants[0]?.price ?? 0) * quantities[p.id])}</span></li>)}</ul>}
           <div className="preorder-total"><span>Estimated subtotal</span><strong>{money(subtotal)}</strong></div>
           <p className="small-copy">USD. Taxes and fulfillment costs are not included. Sandy will confirm your final total.</p>
           <button className="button" disabled={!count} onClick={() => setReviewing(true)}>Review email request <ArrowUpRight size={16} aria-hidden="true" /></button>
