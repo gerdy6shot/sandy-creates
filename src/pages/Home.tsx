@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen, Flame, Heart, Leaf, Soup } from 'lucide-react';
+import { ArrowRight, Heart, Leaf, Palmtree, Soup } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ButtonLink, ProductArt } from '../components/Shared';
 import SpiceGurlReactions from '../components/SpiceGurlReactions';
@@ -9,15 +9,51 @@ import { useStore } from '../lib/store';
 
 const collection = '/spice-gurl#preorder-storefront';
 const featuredOrder = ['sofridobo', 'yardie-glaze', 'sol-shine'];
+const artwork = '/images/editorial/home-design-reference.png';
+const productArtwork: Record<string, string> = {
+  sofridobo: '236 695 191 207',
+  'yardie-glaze': '444 693 190 209',
+  'sol-shine': '653 693 190 209',
+};
+
+function Artwork({ className, crop, label, mask }: {
+  className?: string;
+  crop: string;
+  label: string;
+  mask?: 'hero' | 'culinary';
+}) {
+  return <svg className={className} viewBox={crop} role="img" aria-label={label}>
+    {mask && <defs>
+      <filter id={`sc-${mask}-feather`} x="-10%" y="-20%" width="120%" height="140%">
+        <feGaussianBlur stdDeviation={mask === 'hero' ? 3 : 6}/>
+      </filter>
+      <mask id={`sc-${mask}-art-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width="1086" height="1448">
+        <rect width="1086" height="1448" fill="white"/>
+        <g fill="black" filter={`url(#sc-${mask}-feather)`}>
+          {mask === 'hero' ? <>
+            <path d="M0 0h1086v63H648V31H464v32H0z"/>
+            <rect x="47" y="269" width="305" height="173" rx="5"/>
+            <rect x="833" y="286" width="200" height="84" rx="5"/>
+          </> : <rect x="65" y="1101" width="310" height="217" rx="12"/>}
+        </g>
+      </mask>
+    </defs>}
+    <image href={artwork} width="1086" height="1448" mask={mask && `url(#sc-${mask}-art-mask)`}/>
+  </svg>;
+}
 const productTabs = [
   { label: 'All products', to: collection },
   { label: 'Seasonings', to: '/spice-gurl?category=Blends#preorder-storefront' },
   { label: 'Sauces & glazes', to: '/spice-gurl?category=Sauces#preorder-storefront' },
+  { label: 'Marinades' },
+  { label: 'Herb blends' },
+  { label: 'Cooking essentials' },
+  { label: 'Gift sets' },
 ];
 const features = [
   { icon: Leaf, title: 'Bold flavor', description: 'Seasonings, sauces and glazes.' },
   { icon: Soup, title: 'Chef-crafted', description: 'From Sandy’s culinary world.' },
-  { icon: Flame, title: 'Caribbean roots', description: 'Heritage flavors, modern style.' },
+  { icon: Palmtree, title: 'Caribbean roots', description: 'Heritage flavors, modern style.' },
   { icon: Heart, title: 'Everyday versatility', description: 'From weeknight meals to gatherings.' },
 ];
 
@@ -35,21 +71,14 @@ export default function Home() {
 
   return <div className="sc-home">
     <section className="sc-home-hero" id="welcome">
-      <svg className="sc-home-creates" viewBox="0 0 1060 220" aria-hidden="true">
-        <text x="0" y="208" textLength="1060" lengthAdjust="spacingAndGlyphs">CREATES</text>
-      </svg>
-      <img className="sc-home-portrait" src="/images/editorial/sandy-portrait-green.jpg"
-        alt="Sandy, the creator behind SAN D CREATES" width="1206" height="1605" fetchPriority="high"/>
-      <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
-        alt="Spice Gurl seasonings and sauces alongside a platter of small bites" width="1206" height="1051"/>
-      <img className="sc-home-hero-dish" src="/images/editorial/sandy-food-wings.jpg"
-        alt="Glazed chicken wings from Sandy’s kitchen" width="768" height="1024"/>
+      <Artwork className="sc-home-hero-art" crop="0 35 1086 529" mask="hero"
+        label="CREATES lettering behind Sandy in her chef’s jacket, with a plated dish and Spice Gurl products"/>
       <div className="sc-home-hero-copy">
         <h1>{title.split('\n').map((line, index) => <span key={index}>{line}</span>)}</h1>
         <p>{intro}</p>
         <div className="sc-home-actions">
           <ButtonLink to="/culinary">Explore culinary</ButtonLink>
-          <ButtonLink to={collection} secondary>Shop Spice Gurl</ButtonLink>
+          <Link className="button secondary" to={collection}>Shop Spice Gurl</Link>
         </div>
       </div>
       <Link className="sc-home-hero-signature" to="/about" aria-label="Meet Sandy">
@@ -60,7 +89,9 @@ export default function Home() {
 
     <section className="sc-home-shop" id="spice-collection" aria-labelledby="sc-featured">
       <div className="sc-home-collection">
-        <Link className="sc-home-spice-logo" to="/spice-gurl"><Soup aria-hidden="true"/><span>Spice<br/>Gurl</span></Link>
+        <Link className="sc-home-spice-logo" to="/spice-gurl" aria-label="Spice Gurl">
+          <Artwork crop="56 574 159 62" label="Spice Gurl"/>
+        </Link>
         <div className="sc-home-collection-copy">
           <p>The Signature Spice Collection</p>
           <span>Seasonings, sauces, and culinary essentials inspired by Caribbean roots and global flavor.</span>
@@ -68,7 +99,11 @@ export default function Home() {
         <ButtonLink to={collection} secondary>Shop all products</ButtonLink>
       </div>
       <nav className="sc-home-tabs" aria-label="Browse Spice Gurl products">
-        {productTabs.map(tab => <Link key={tab.label} to={tab.to}>{tab.label}</Link>)}
+        {productTabs.map(tab => tab.to
+          ? <Link key={tab.label} to={tab.to}>{tab.label}</Link>
+          : <span key={tab.label} title="No published products in this category">
+              {tab.label}<span className="sr-only">, unavailable</span>
+            </span>)}
       </nav>
       <div className="sc-home-featured">
         <div className="sc-home-featured-intro">
@@ -80,7 +115,11 @@ export default function Home() {
             const preorder = preorderCatalog[product.slug];
             const detail = `/spice-gurl/products/${product.slug}`;
             return <article className="sc-home-product" key={product.id}>
-              <Link to={detail} aria-label={`Explore ${product.name}`}><ProductArt product={product}/></Link>
+              <Link to={detail} aria-label={`Explore ${product.name}`}>
+                {productArtwork[product.slug] && product.image === `/images/products/${product.slug}.jpg`
+                  ? <Artwork className="sc-home-product-art" crop={productArtwork[product.slug]} label={product.name}/>
+                  : <ProductArt product={product}/>}
+              </Link>
               <div className="sc-home-product-copy">
                 <h3><Link to={detail}>{product.name}</Link></h3>
                 <p>{product.short}</p>
@@ -94,12 +133,12 @@ export default function Home() {
           })}
           <article className="sc-home-product sc-home-product--collection">
             <Link to={collection} aria-label="Explore the full Spice Gurl collection">
-              <img src="/images/editorial/spicegurl-collection.jpg" alt="Spice Gurl products with a platter of small bites"
-                width="1206" height="1051" loading="lazy"/>
+              <Artwork className="sc-home-product-art" crop="860 693 190 209"
+                label="Mo’Betta Mojo bottle shown in the Spice Gurl collection artwork"/>
             </Link>
             <div className="sc-home-product-copy">
-              <h3><Link to={collection}>Spice Gurl Collection</Link></h3>
-              <p>Explore the full preorder menu.</p>
+              <h3><Link to={collection}>Mo’Betta Mojo</Link></h3>
+              <p>Collection spotlight.</p>
               <Link className="button" to={collection}>Shop collection</Link>
             </div>
           </article>
@@ -114,25 +153,28 @@ export default function Home() {
     </ul>
 
     <section className="sc-home-culinary" aria-labelledby="sc-culinary-heading">
-      <img className="sc-home-culinary-image" src="/images/editorial/sandy-plated-food.jpg"
-        alt="Sandy’s plated dish with rice, beef and peppers" width="768" height="1024" loading="lazy"/>
+      <Artwork className="sc-home-culinary-art" crop="0 1087 1086 250" mask="culinary"
+        label="Grilled shrimp on a dark plate with herbs and charred citrus"/>
       <div className="sc-home-culinary-copy">
         <p className="eyebrow">Culinary lifestyle</p>
         <h2 id="sc-culinary-heading">Recipes. Culture.<br/>Lifestyle.</h2>
         <p>Culinary ideas and stories that celebrate food, people, and the power of flavor.</p>
-        <ButtonLink to="/culinary"><BookOpen size={14} aria-hidden="true"/>Explore the culinary hub</ButtonLink>
+        <ButtonLink to="/culinary">Explore the culinary hub</ButtonLink>
+      </div>
+    </section>
+
+    <section className="sc-home-follow" aria-labelledby="sc-follow-heading">
+      <span className="sc-script" aria-hidden="true">San D Creates</span>
+      <div><h2 id="sc-follow-heading">Stay in the Kitchen with Me</h2>
+        <p>Find new recipes, product updates, and more from Sandy.</p></div>
+      <div className="sc-home-follow-actions">
+        <span className="sc-home-signup-status">Email signup not yet open</span>
+        <a className="button" href="https://www.instagram.com/san.d.creates/" target="_blank" rel="noreferrer">
+          Follow on Instagram <ArrowRight size={15} aria-hidden="true"/>
+        </a>
       </div>
     </section>
 
     <SpiceGurlReactions/>
-
-    <section className="sc-home-follow" aria-labelledby="sc-follow-heading">
-      <span className="sc-script" aria-hidden="true">SAN D CREATES</span>
-      <div><h2 id="sc-follow-heading">Stay in the Kitchen with Me</h2>
-        <p>Find new recipes, product updates, and more from Sandy.</p></div>
-      <a className="button" href="https://www.instagram.com/san.d.creates/" target="_blank" rel="noreferrer">
-        Follow on Instagram <ArrowRight size={15} aria-hidden="true"/>
-      </a>
-    </section>
   </div>;
 }
