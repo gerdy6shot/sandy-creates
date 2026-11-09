@@ -55,10 +55,11 @@ export function Store({children}:{children:ReactNode}) {
  useEffect(()=>{
   let alive=true;
   async function load() {
-   const [products,content,availability]=await Promise.all([
+   const [products,content,availability,events]=await Promise.all([
     sandySupabase.from('products').select('*,product_variants(*),product_images(*)').eq('published',true).order('created_at',{ascending:true}),
     sandySupabase.from('site_content').select('key,value').eq('published',true),
     sandySupabase.from('availability').select('*').eq('id',true).maybeSingle(),
+    sandySupabase.from('events').select('id,slug,title,description,start_at,end_at,timezone,published,image_path').eq('published',true),
    ]);
    if(!alive)return;
    if(products.error) { console.warn('Public catalog unavailable:',products.error.message);return; }
@@ -66,6 +67,12 @@ export function Store({children}:{children:ReactNode}) {
    setData(old=>({
     ...old,
     products:actual.map(fromDatabase),
+    events:events.error?old.events:(events.data??[]).map(e=>({
+      id:e.id,slug:e.slug,title:e.title,description:e.description,
+      start:e.start_at??'',end:e.end_at??'',timezone:e.timezone,
+      location:'',published:e.published,image:e.image_path??'',
+      status:e.end_at&&Date.parse(e.end_at)<Date.now()?'past' as const:'upcoming' as const,
+    })),
     content:{
      ...old.content,
      ...Object.fromEntries((content.data??[]).filter(row=>typeof row.value==='string').map(row=>[row.key,row.value])),
@@ -91,6 +98,6 @@ export function Store({children}:{children:ReactNode}) {
   catch {setStorageError(true);}
  },[cart]);
  function reset(){setCart([]);}
- return <Context.Provider value={{data,setData,cart:setCart?normalizeCart(cart,data.products):cart,setCart,storageError,reset}}>{children}</Context.Provider>;
+ return <Context.Provider value={{data,setData,cart:normalizeCart(cart,data.products),setCart,storageError,reset}}>{children}</Context.Provider>;
 }
 export function useStore(){const c=useContext(Context);if(!c)throw new Error('Store missing');return c;}
