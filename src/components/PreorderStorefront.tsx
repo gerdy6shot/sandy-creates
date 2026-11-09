@@ -60,7 +60,7 @@ export default function PreorderStorefront({ products }: { products: Product[] }
             })}
           </div>
           {!visible.length && <p>No products are currently shown in this category.</p>}
-          <p className="caption preorder-photo-note">Original photographs supplied for Sandy Creates. Prices from <a href="https://www.spicegurl.store/" target="_blank" rel="noopener noreferrer">Spice Gurl’s product listing</a>. Final preorder details are confirmed by Sandy.</p>
+          <p className="caption preorder-photo-note">Original photographs supplied for SAN D CREATES. Prices from <a href="https://www.spicegurl.store/" target="_blank" rel="noopener noreferrer">Spice Gurl’s product listing</a>. Final preorder details are confirmed by Sandy.</p>
         </div>
         <aside className={`preorder-summary ${reviewing ? 'is-reviewing' : ''}`} aria-labelledby="preorder-summary-title">
           <ShoppingBag size={22} strokeWidth={1.4} aria-hidden="true" /><p className="eyebrow">A LITTLE COLLECTION OF FLAVOR</p><h3 id="preorder-summary-title">Your<br /><i>preorder.</i></h3>

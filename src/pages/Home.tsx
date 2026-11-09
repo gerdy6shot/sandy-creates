@@ -39,7 +39,7 @@ export default function Home() {
         <text x="0" y="208" textLength="1060" lengthAdjust="spacingAndGlyphs">CREATES</text>
       </svg>
       <img className="sc-home-portrait" src="/images/editorial/sandy-portrait-green.jpg"
-        alt="Sandy, the creator behind Sandy Creates" width="1206" height="1605" fetchPriority="high"/>
+        alt="Sandy, the creator behind SAN D CREATES" width="1206" height="1605" fetchPriority="high"/>
       <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
         alt="Spice Gurl seasonings and sauces alongside a platter of small bites" width="1206" height="1051"/>
       <img className="sc-home-hero-dish" src="/images/editorial/sandy-food-wings.jpg"
@@ -127,7 +127,7 @@ export default function Home() {
     <SpiceGurlReactions/>
 
     <section className="sc-home-follow" aria-labelledby="sc-follow-heading">
-      <span className="sc-script" aria-hidden="true">Sandy Creates</span>
+      <span className="sc-script" aria-hidden="true">SAN D CREATES</span>
       <div><h2 id="sc-follow-heading">Stay in the Kitchen with Me</h2>
         <p>Find new recipes, product updates, and more from Sandy.</p></div>
       <a className="button" href="https://www.instagram.com/san.d.creates/" target="_blank" rel="noreferrer">
