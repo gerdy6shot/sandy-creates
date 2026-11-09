@@ -9,38 +9,6 @@ import { useStore } from '../lib/store';
 
 const collection = '/spice-gurl#preorder-storefront';
 const featuredOrder = ['sofridobo', 'yardie-glaze', 'sol-shine'];
-const artwork = '/images/editorial/home-design-reference.png';
-const productArtwork: Record<string, string> = {
-  sofridobo: '236 695 191 207',
-  'yardie-glaze': '444 693 190 209',
-  'sol-shine': '653 693 190 209',
-};
-
-function Artwork({ className, crop, label, mask }: {
-  className?: string;
-  crop: string;
-  label: string;
-  mask?: 'hero' | 'culinary';
-}) {
-  return <svg className={className} viewBox={crop} preserveAspectRatio="xMidYMid slice" role="img" aria-label={label}>
-    {mask && <defs>
-      <filter id={`sc-${mask}-feather`} x="-10%" y="-20%" width="120%" height="140%">
-        <feGaussianBlur stdDeviation={mask === 'hero' ? 3 : 6}/>
-      </filter>
-      <mask id={`sc-${mask}-art-mask`} maskUnits="userSpaceOnUse" x="0" y="0" width="1086" height="1448">
-        <rect width="1086" height="1448" fill="white"/>
-        <g fill="black" filter={`url(#sc-${mask}-feather)`}>
-          {mask === 'hero' ? <>
-            <path d="M0 0h1086v63H648V31H464v32H0z"/>
-            <rect x="47" y="269" width="305" height="173" rx="5"/>
-            <rect x="833" y="286" width="200" height="84" rx="5"/>
-          </> : <rect x="65" y="1101" width="310" height="217" rx="12"/>}
-        </g>
-      </mask>
-    </defs>}
-    <image href={artwork} width="1086" height="1448" mask={mask && `url(#sc-${mask}-art-mask)`}/>
-  </svg>;
-}
 const productTabs = [
   { label: 'All products', to: collection },
   { label: 'Seasonings', to: '/spice-gurl?category=Blends#preorder-storefront' },
@@ -71,8 +39,15 @@ export default function Home() {
 
   return <div className="sc-home">
     <section className="sc-home-hero" id="welcome">
-      <Artwork className="sc-home-hero-art" crop="0 35 1086 529" mask="hero"
-        label="CREATES lettering behind Sandy in her chef’s jacket, with a plated dish and Spice Gurl products"/>
+      <div className="sc-home-hero-visual">
+        <span className="sc-home-creates" aria-hidden="true">CREATES</span>
+        <img className="sc-home-hero-person" src="/images/editorial/sandy-portrait-green.jpg"
+          alt="Original portrait of Sandy wearing a burgundy sweater and holding a green drink" fetchPriority="high"/>
+        <img className="sc-home-hero-collection" src="/images/editorial/spicegurl-collection.jpg"
+          alt="Original photograph of the Spice Gurl bottled sauces, seasoning jars, and prepared food" fetchPriority="high"/>
+        <img className="sc-home-hero-food" src="/images/editorial/sandy-food-wings.jpg"
+          alt="Sandy’s glossy glazed chicken wings" loading="lazy"/>
+      </div>
       <div className="sc-home-hero-copy">
         <h1>{title.split('\n').map((line, index) => <span key={index}>{line}</span>)}</h1>
         <p>{intro}</p>
@@ -90,7 +65,7 @@ export default function Home() {
     <section className="sc-home-shop" id="spice-collection" aria-labelledby="sc-featured">
       <div className="sc-home-collection">
         <Link className="sc-home-spice-logo" to="/spice-gurl" aria-label="Spice Gurl">
-          <Artwork crop="56 574 159 62" label="Spice Gurl"/>
+          <span className="sc-home-spice-logo-type">SPICE<br/>GURL</span>
         </Link>
         <div className="sc-home-collection-copy">
           <p>The Signature Spice Collection</p>
@@ -116,9 +91,7 @@ export default function Home() {
             const detail = `/spice-gurl/products/${product.slug}`;
             return <article className="sc-home-product" key={product.id}>
               <Link to={detail} aria-label={`Explore ${product.name}`}>
-                {productArtwork[product.slug] && product.image === `/images/products/${product.slug}.jpg`
-                  ? <Artwork className="sc-home-product-art" crop={productArtwork[product.slug]} label={product.name}/>
-                  : <ProductArt product={product}/>}
+                <ProductArt product={product}/>
               </Link>
               <div className="sc-home-product-copy">
                 <h3><Link to={detail}>{product.name}</Link></h3>
@@ -133,8 +106,9 @@ export default function Home() {
           })}
           <article className="sc-home-product sc-home-product--collection">
             <Link to={collection} aria-label="Explore the full Spice Gurl collection">
-              <Artwork className="sc-home-product-art" crop="860 693 190 209"
-                label="Mo’Betta Mojo bottle shown in the Spice Gurl collection artwork"/>
+              <img className="sc-home-product-art sc-home-product-collection-img"
+                src="/images/editorial/spicegurl-collection.jpg"
+                alt="Original Spice Gurl collection photograph, including the Mo’Betta Mojo bottle" loading="lazy"/>
             </Link>
             <div className="sc-home-product-copy">
               <h3><Link to={collection}>Mo’Betta Mojo</Link></h3>
@@ -153,8 +127,8 @@ export default function Home() {
     </ul>
 
     <section className="sc-home-culinary" aria-labelledby="sc-culinary-heading">
-      <Artwork className="sc-home-culinary-art" crop="0 1087 1086 250" mask="culinary"
-        label="Grilled shrimp on a dark plate with herbs and charred citrus"/>
+      <img className="sc-home-culinary-art" src="/images/editorial/sandy-plated-food.jpg"
+        alt="Sandy’s original food photograph: rice, seasoned meat, and sautéed peppers on a white plate" loading="lazy"/>
       <div className="sc-home-culinary-copy">
         <p className="eyebrow">Culinary lifestyle</p>
         <h2 id="sc-culinary-heading">Recipes. Culture.<br/>Lifestyle.</h2>

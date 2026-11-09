@@ -4,4 +4,5 @@ import App from './App';
 import './style.css';
 import './editorial-redesign.css';
 import './home-design.css';
+import './real-photography.css';
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
