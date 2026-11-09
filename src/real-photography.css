@@ -42,8 +42,15 @@
   height:45%;
   object-fit:cover;
   object-position:center 65%;
-  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 19%);
-  mask-image:linear-gradient(to right, transparent 0%, #000 19%);
+  /* Feather the top into the green hero while retaining the existing left fade. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 19%),
+    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 19%),
+    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
+  mask-composite: intersect;
 }
 .sc-home-hero-food {
   position:absolute;
