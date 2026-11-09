@@ -1,0 +1,176 @@
+/* Swap generated composite crops for Sandy's original, unretouched photographs.
+   Scoped to the existing Sandy Creates homepage; no layout or business-logic changes elsewhere. */
+
+.sc-home-hero {
+  min-height: clamp(560px, 50.5vw, 825px);
+  background: radial-gradient(ellipse at 60% 39%, #194733, #061b13 68%);
+}
+.sc-home-hero-visual {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.sc-home-creates {
+  position:absolute;
+  z-index:1;
+  top:3%;
+  left:1.6%;
+  color:#fbebcc;
+  font:700 clamp(91px, 17vw, 340px)/.9 Georgia,serif;
+  letter-spacing:-.09em;
+  white-space:nowrap;
+  user-select:none;
+}
+.sc-home-hero-person {
+  position:absolute;
+  z-index:2;
+  top:7%;
+  left:32%;
+  width:38%;
+  height:92%;
+  display:block;
+  object-fit:cover;
+  object-position:50% 28%;
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 88%, transparent 100%);
+  mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 88%, transparent 100%);
+}
+.sc-home-hero-collection {
+  position:absolute;
+  z-index:3;
+  right:-1%;
+  bottom:-1%;
+  width:43%;
+  height:45%;
+  object-fit:cover;
+  object-position:center 65%;
+  -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 19%);
+  mask-image:linear-gradient(to right, transparent 0%, #000 19%);
+}
+.sc-home-hero-food {
+  position:absolute;
+  z-index:3;
+  left:34%;
+  bottom:-5%;
+  width:24%;
+  height:29%;
+  display:block;
+  object-fit:cover;
+  object-position:45% 48%;
+  -webkit-mask-image:radial-gradient(ellipse at center, #000 42%, transparent 73%);
+  mask-image:radial-gradient(ellipse at center, #000 42%, transparent 73%);
+}
+.sc-home-hero-copy {z-index:5}
+.sc-home-hero-signature{z-index:5}
+.sc-home-spice-logo-type {
+  display:block;
+  padding:4px 5px;
+  color:#f2db9d;
+  font:600 clamp(26px, 3.35vw, 60px)/.88 Georgia,serif;
+  letter-spacing:-.06em;
+  text-align:left;
+}
+.sc-home-product .product-art.supplied-product {
+  width:100%;
+  aspect-ratio:.917;
+  height:auto;
+  background:#020e0a;
+}
+.sc-home-product .product-art.supplied-product .product-photo-frame {
+  inset:0;
+}
+.sc-home-product .product-art.supplied-product img {
+  display:block;
+  max-width:none;
+  width:auto;
+  height:100%;
+}
+.sc-home-product-collection-img {
+  object-fit:cover;
+  object-position:center 65%;
+  background:#020e0a;
+}
+.sc-home-culinary {
+  min-height:clamp(350px,31vw,550px);
+  background:linear-gradient(105deg,#071e14 20%,#173c2b 74%,#051b12);
+}
+.sc-home-culinary-art {
+  position:absolute;
+  right:0;
+  top:0;
+  width:64%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:50% 42%;
+  -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 28%);
+  mask-image:linear-gradient(to right,transparent 0%,#000 28%);
+}
+.sc-home-culinary-copy {z-index:2}
+@media(min-width:801px) {
+  .sc-home-hero {margin-top:calc(-1 * clamp(14px, 2vw, 38px))}
+  .sc-home-product .product-art.supplied-product {aspect-ratio:.955}
+}
+@media(max-width:800px) {
+  .sc-home-hero {
+    min-height:clamp(630px,89vw,790px);
+  }
+  .sc-home-creates {
+    left:2%;
+    top:8%;
+    font-size:17.1vw;
+  }
+  .sc-home-hero-person {
+    left:22%;
+    top:17%;
+    width:72%;
+    height:51%;
+  }
+  .sc-home-hero-collection {
+    right:0;
+    bottom:28%;
+    width:53%;
+    height:23%;
+  }
+  .sc-home-hero-food {display:none}
+  .sc-home-hero-copy {
+    position:absolute;
+    top:auto;
+    bottom:5%;
+    left:5%;
+    width:90%;
+    padding:0;
+    background:transparent;
+  }
+  .sc-home-hero-signature {
+    top:29%;
+    right:5%;
+  }
+  .sc-home-culinary {min-height:620px}
+  .sc-home-culinary-art {
+    left:0;
+    right:0;
+    width:100%;
+    height:65%;
+    object-position:center 55%;
+    -webkit-mask-image:linear-gradient(to bottom,#000 50%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 50%,transparent 100%);
+  }
+  .sc-home-culinary-copy {
+    position:absolute;
+    top:auto;
+    left:5%;
+    bottom:6%;
+    width:89%;
+    padding:0;
+    background:transparent;
+  }
+}
+@media(max-width:480px){
+  .sc-home-hero {min-height:710px}
+  .sc-home-hero-person {top:15%;left:9%;width:89%;height:54%}
+  .sc-home-hero-collection {bottom:31%;width:56%;height:20%}
+  .sc-home-hero-copy {bottom:4.5%}
+  .sc-home-hero-signature{top:24%;right:4%}
+  .sc-home-culinary{min-height:560px}
+}
