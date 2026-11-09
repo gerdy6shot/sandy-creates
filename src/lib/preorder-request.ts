@@ -31,7 +31,7 @@ export function createLivePreorderDraft(selection: {name:string;price:number;qua
  });
  return {
   subject:'Spice Gurl preorder request',
-  body:['Hello Sandy,','','I’d like to preorder:',...lines,'',`Estimated product subtotal: ${usd(subtotal)} USD.`,'Based on the current published product prices; taxes and fulfillment costs are not included.','','Please confirm product sizes, final prices, availability, and fulfillment details.','','This is an email inquiry, not a confirmed order or stock reservation. No payment has been made.','','My name:','Other notes:'].join('\\n'),
+  body:['Hello Sandy,','','I’d like to preorder:',...lines,'',`Estimated product subtotal: ${usd(subtotal)} USD.`,'Based on the current published product prices; taxes and fulfillment costs are not included.','','Please confirm product sizes, final prices, availability, and fulfillment details.','','This is an email inquiry, not a confirmed order or stock reservation. No payment has been made.','','My name:','Other notes:'].join('\n'),
   subtotal,
  };
 }
