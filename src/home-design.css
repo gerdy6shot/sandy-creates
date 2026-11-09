@@ -13,8 +13,8 @@
 }
 
 .site-header.sc-home-header {
-  padding: 12px 4.4vw 10px 6.5vw;
-  min-height: 65px;
+  padding: 8px 4.4vw 8px 7vw;
+  min-height: clamp(52px, 4.55vw, 86px);
   background: #061911;
 }
 
@@ -23,7 +23,7 @@
   position: relative;
   margin-left: 0;
   font-style: normal;
-  font-size: clamp(23px, 2.65vw, 43px);
+  font-size: clamp(25px, 3.05vw, 55px);
 }
 
 .sc-home-header .sc-script::after,
@@ -68,76 +68,33 @@
 }
 
 .sc-home .button {
-  min-height: 38px;
-  padding: 9px 16px;
+  min-height: clamp(32px, 2.9vw, 47px);
+  padding: 6px clamp(10px, 1.5vw, 27px);
   gap: 8px;
   text-transform: uppercase;
-  font-size: 10px;
+  font-size: clamp(9px, .92vw, 15px);
 }
 
 .sc-home-hero {
   position: relative;
   isolation: isolate;
-  min-height: clamp(510px, 46.5vw, 880px);
   overflow: hidden;
-  background: radial-gradient(ellipse at 50% 39%, #214832, #0a2d20 52%, #03120c 90%);
   border-bottom: 1px solid #9d783d;
+  background: radial-gradient(ellipse at 16% 57%, #0a281e, #061b13 70%, #061810);
 }
 
-.sc-home-creates {
-  position: absolute;
-  z-index: -3;
-  left: 2.5%;
-  width: 95%;
-  top: 1%;
-  overflow: visible;
-  font: bold 265px Georgia, "Times New Roman", serif;
-  fill: var(--home-cream);
-  filter: drop-shadow(0 3px 2px #0009);
-}
-
-.sc-home-portrait {
-  position: absolute;
-  z-index: -2;
-  top: 16.5vw;
-  left: 31%;
-  width: 38%;
+.sc-home-hero-art {
+  display: block;
+  width: 100%;
   height: auto;
-  /* Trace Sandy’s silhouette in the original photo. The JPEG stays intact. */
-  clip-path: polygon(0 76%, 3% 70%, 4% 61%, 7% 56%, 10% 55%, 8% 49%, 9% 45%, 14% 41%, 22% 40%, 22% 37%, 24% 34%, 23% 31%, 24% 27%, 26% 25%, 25% 23%, 28% 21%, 28% 18%, 31% 16%, 32% 13%, 35% 10%, 39% 7%, 44% 3%, 48% 1%, 54% 0, 61% 0, 67% 2%, 73% 6%, 76% 10%, 80% 15%, 81% 18%, 85% 22%, 87% 25%, 88% 29%, 89% 35%, 91% 38%, 91% 43%, 93% 48%, 91% 53%, 94% 56%, 96% 64%, 96% 70%, 98% 77%, 100% 80%, 100% 100%, 0 100%);
-  mask-image: linear-gradient(#000 72%, transparent 100%);
-}
-
-.sc-home-hero-collection {
-  position: absolute;
-  z-index: -1;
-  right: -1%;
-  bottom: -13%;
-  width: 46%;
-  height: auto;
-  mask-image: linear-gradient(90deg, transparent, #000 30%), linear-gradient(0deg, #000 65%, transparent 98%);
-  mask-composite: intersect;
-}
-
-.sc-home-hero-dish {
-  position: absolute;
-  z-index: -1;
-  bottom: -5%;
-  left: -3%;
-  width: 37%;
-  height: 33%;
-  object-fit: cover;
-  object-position: center 54%;
-  mask-image: linear-gradient(0deg, #000 8%, transparent 99%), linear-gradient(90deg, #000 38%, transparent 97%);
-  mask-composite: intersect;
+  overflow: hidden;
 }
 
 .sc-home-hero-copy {
-  position: relative;
-  width: min(33%, 500px);
-  margin-left: 5.7%;
-  padding-top: clamp(204px, 19.3vw, 365px);
-  padding-bottom: 9vw;
+  position: absolute;
+  top: 44.6%;
+  left: 5.8%;
+  width: 30.5%;
   text-shadow: 0 1px 10px #00100a;
 }
 
@@ -147,7 +104,7 @@
   letter-spacing: -.047em;
 }
 
-.sc-home-hero h1 { font-size: clamp(29px, 2.85vw, 58px); }
+.sc-home-hero h1 { font-size: clamp(24px, 2.8vw, 58px); }
 .sc-home-hero h1 span { display: block; }
 .sc-home-hero h1::after, .sc-home-featured h2::after, .sc-home-culinary h2::after {
   display: block;
@@ -155,7 +112,7 @@
   width: 42px;
   height: 2px;
   background: var(--home-gold);
-  margin: 16px 0 12px;
+  margin: clamp(8px, 1.25vw, 20px) 0 clamp(8px, 1vw, 16px);
 }
 
 .sc-home-hero-copy p, .sc-home-featured-intro p, .sc-home-culinary-copy > p:not(.eyebrow) {
@@ -165,10 +122,10 @@
   line-height: 1.55;
 }
 
-.sc-home-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+.sc-home-actions { display: flex; flex-wrap: wrap; gap: .9vw; margin-top: clamp(11px, 1.35vw, 25px); }
 .sc-home-hero-signature {
   position: absolute;
-  top: 47%;
+  top: 49%;
   right: 5.3%;
   display: grid;
   gap: 8px;
@@ -195,25 +152,21 @@
 }
 
 .sc-home-spice-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: block;
   padding-right: clamp(16px, 3vw, 46px);
   border-right: 1px solid #ba9454;
-  font: 400 clamp(19px, 2.65vw, 50px)/.85 Georgia, serif;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
-.sc-home-spice-logo svg { width: clamp(27px, 5vw, 76px); height: auto; stroke-width: 1.1; color: #eccd85; }
+.sc-home-spice-logo svg { display: block; width: clamp(78px, 14vw, 242px); height: auto; overflow: hidden; }
 .sc-home-collection-copy p { font: italic 400 clamp(20px, 2.2vw, 38px)/1 Georgia, serif; margin-bottom: 4px; }
 .sc-home-collection-copy span { display: block; max-width: 49ch; font-size: clamp(11px, 1.1vw, 16px); line-height: 1.45; }
 .sc-home-collection > .button { border-radius: 6px; }
 
-.sc-home-tabs { display: flex; border: 1px solid #776744; border-radius: 6px; overflow: hidden; }
-.sc-home-tabs a {
-  flex: 1;
-  padding: 10px 6px;
+.sc-home-tabs { display: flex; border: 1px solid #776744; border-radius: 6px; overflow-x: auto; }
+.sc-home-tabs > :is(a, span) {
+  flex: 1 0 auto;
+  padding: 10px clamp(6px, 1vw, 16px);
+  white-space: nowrap;
   border-right: 1px solid #8570444d;
   background: #061a1266;
   text-align: center;
@@ -222,6 +175,7 @@
   font-weight: 700;
   letter-spacing: .05em;
 }
+.sc-home-tabs > span { color: #c9bb9e; }
 .sc-home-tabs a:first-child { background: linear-gradient(145deg, #f0d593, #b88b39); color: #102114; }
 .sc-home-tabs a:hover { background: #e5c37d; color: #102114; }
 .sc-home-tabs a:focus-visible { outline-offset: -3px; }
@@ -238,13 +192,14 @@
   text-align: center;
 }
 .sc-home-product > a { display: block; }
-.sc-home-product .product-art, .sc-home-product--collection img {
+.sc-home-product .product-art, .sc-home-product-art {
   display: block;
   width: 100%;
-  aspect-ratio: .94;
+  aspect-ratio: .917;
+  height: auto;
+  overflow: hidden;
   background: #071611;
 }
-.sc-home-product--collection img { height: auto; object-fit: cover; }
 .sc-home-product-copy { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 5px 12px; }
 .sc-home-product-copy h3 { color: var(--home-cream); font: 600 clamp(16px, 1.63vw, 31px)/1.07 Georgia, serif; }
 .sc-home-product-copy p { margin: 5px 0; color: #e5c791; font-size: clamp(10px, .92vw, 14px); line-height: 1.35; }
@@ -273,17 +228,19 @@
   overflow: hidden;
   background: radial-gradient(ellipse at 54% 42%, #2d543c, #071e14 65%);
 }
-.sc-home-culinary-image {
-  position: absolute;
-  z-index: -1;
-  inset: 0 0 0 auto;
-  width: 66%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 61%;
-  mask-image: linear-gradient(90deg, transparent, #000 32%);
+.sc-home-culinary-art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
 }
-.sc-home-culinary-copy { padding: clamp(32px, 4.2vw, 75px) 8vw; }
+
+.sc-home-culinary-copy {
+  position: absolute;
+  top: 11%;
+  left: 8%;
+  width: 29%;
+}
 .sc-home-culinary .eyebrow { margin-bottom: 10px; color: #efc76a; letter-spacing: .29em; }
 .sc-home-culinary .button { margin-top: 14px; }
 .sc-home .sc-reactions { border-top: 1px solid #8b7447; }
@@ -298,29 +255,46 @@
   background: radial-gradient(ellipse at 33% 35%, #214a34, #071d15 76%);
 }
 .sc-home-follow .sc-script { position: relative; font-size: clamp(23px, 2.9vw, 51px); white-space: nowrap; }
-.sc-home-follow > div { padding-left: clamp(14px, 2vw, 35px); border-left: 1px solid #8b7447; }
+.sc-home-follow > div:nth-child(2) { padding-left: clamp(14px, 2vw, 35px); border-left: 1px solid #8b7447; }
 .sc-home-follow h2 { font: italic 400 clamp(20px, 2.2vw, 37px)/1.1 Georgia, serif; }
 .sc-home-follow p { margin-top: 4px; font-size: 12px; line-height: 1.4; }
+.sc-home-follow-actions { display: flex; gap: 8px; align-items: center; }
+.sc-home-signup-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #8b7447;
+  border-radius: 6px;
+  color: #e4d3b1;
+  font-size: 11px;
+  white-space: nowrap;
+}
 
 @media (max-width: 950px) and (min-width: 801px) {
   .sc-home-header .main-nav { gap: 11px; }
   .sc-home-header .main-nav a { font-size: 9px; }
   .sc-home-header .sc-header-shop { padding-inline: 13px; }
-  .sc-home-hero { min-height: 445px; }
 }
 
 @media (max-width: 800px) {
   .sc-home-header .sc-header-shop { display: inline-flex; padding: 9px 13px; }
   .sc-home-header .header-actions { gap: 11px; }
-  .sc-home-hero { min-height: 0; }
-  .sc-home-hero-copy { padding-top: 52vw; padding-bottom: 28px; width: 75%; }
-  .sc-home-creates { top: 2.7vw; }
-  .sc-home-portrait { top: 20vw; left: 25%; width: 54%; }
-  .sc-home-hero-collection { width: 49%; bottom: -3%; opacity: .82; }
-  .sc-home-hero-dish { height: 27%; width: 47%; opacity: .65; }
-  .sc-home-hero-signature { top: 30%; right: 4%; }
+  .sc-home-hero-copy {
+    position: relative;
+    left: auto;
+    width: auto;
+    padding: 16px var(--home-gutter) 23px;
+    background: linear-gradient(105deg, #0a2b20, #061a12);
+  }
+  .sc-home-hero-signature { top: 28vw; right: 4.5%; }
   .sc-home-hero-signature span:first-child { display: none; }
-  .sc-home-hero-signature .sc-script { font-size: clamp(29px, 6vw, 53px); }
+  .sc-home-hero-signature .sc-script { font-size: clamp(19px, 5vw, 39px); }
+  .sc-home-culinary-copy {
+    position: relative;
+    left: auto;
+    width: auto;
+    padding: 19px var(--home-gutter) 25px;
+  }
   .sc-home-featured { grid-template-columns: 1fr; gap: 15px; padding-top: 16px; }
   .sc-home-featured-intro { padding: 0; }
   .sc-home-featured-intro h2 br { display: none; }
@@ -331,23 +305,19 @@
   .sc-home-features li { justify-content: flex-start; }
   .sc-home-features li:nth-child(3) { border: 0; }
   .sc-home-follow { grid-template-columns: auto 1fr; }
-  .sc-home-follow > a { grid-column: 2; justify-self: start; }
+  .sc-home-follow-actions { grid-column: 2; justify-self: start; }
 }
 
 @media (max-width: 480px) {
   .site-header.sc-home-header { padding-inline: 5vw; }
   .sc-home-header .sc-header-shop { display: none; }
-  .sc-home-hero-copy { width: 86%; padding-top: 59vw; }
-  .sc-home-hero-collection { bottom: 6%; opacity: .5; }
   .sc-home-hero-copy p { max-width: 28ch; }
   .sc-home-collection { grid-template-columns: auto 1fr; gap: 11px; margin-inline: 0; }
   .sc-home-collection > a:last-child { grid-column: 2; justify-self: start; }
   .sc-home-collection .sc-home-spice-logo { padding-right: 10px; }
   .sc-home-collection-copy p { font-size: 20px; }
-  .sc-home-culinary-copy { padding-inline: 5vw; }
-  .sc-home-culinary-image { width: 72%; opacity: .62; }
   .sc-home-follow { grid-template-columns: 1fr; gap: 12px; }
   .sc-home-follow .sc-script { justify-self: start; }
-  .sc-home-follow > div { padding-left: 0; border: 0; }
-  .sc-home-follow > a { grid-column: 1; }
+  .sc-home-follow > div:nth-child(2) { padding-left: 0; border: 0; }
+  .sc-home-follow-actions { grid-column: 1; flex-wrap: wrap; }
 }
