@@ -36,21 +36,17 @@
 .sc-home-hero-collection {
   position:absolute;
   z-index:3;
-  right:-1%;
-  bottom:-1%;
-  width:43%;
-  height:45%;
+  right:0;
+  bottom:0;
+  width:41%;
+  height:53%;
   object-fit:cover;
-  object-position:center 65%;
-  /* Feather the top into the green hero while retaining the existing left fade. */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, #000 19%),
-    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
-  -webkit-mask-composite: source-in;
+  object-position:center 64%;
+  /* The diagonal fade follows the arm and opens up around the platter. */
   mask-image:
-    linear-gradient(to right, transparent 0%, #000 19%),
-    linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
-  mask-composite: intersect;
+    linear-gradient(120deg, transparent calc(37.5% + clamp(0px, 40px - 2.8vw, 18px)), #000 53%),
+    linear-gradient(to bottom, transparent, #000 27%);
+  mask-composite:intersect;
 }
 .sc-home-hero-food {
   position:absolute;
@@ -124,21 +120,6 @@
     height:93%;
     object-position:center bottom;
   }
-  /* Leave negative space between Sandy's right arm and the product still life.
-     Keep the collection on the right and fade its left edge before it reaches her. */
-  .sc-home-hero-collection {
-    right:0;
-    width:35%;
-    height:42%;
-    -webkit-mask-image:
-      linear-gradient(to right, transparent 0%, transparent 18%, #000 43%),
-      linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
-    -webkit-mask-composite:source-in;
-    mask-image:
-      linear-gradient(to right, transparent 0%, transparent 18%, #000 43%),
-      linear-gradient(to bottom, transparent 0%, rgba(0,0,0,.72) 26%, #000 55%);
-    mask-composite:intersect;
-  }
   .sc-home-product .product-art.supplied-product {aspect-ratio:.955}
 }
 @media(max-width:800px) {
@@ -157,10 +138,12 @@
     height:51%;
   }
   .sc-home-hero-collection {
-    right:0;
-    bottom:28%;
-    width:53%;
-    height:23%;
+    bottom:25%;
+    width:min(35%, calc(50% - 109px));
+    height:auto;
+    mask-image:
+      linear-gradient(to right, transparent 18%, #000 32%),
+      linear-gradient(to bottom, transparent, #000 19%, #000 86%, transparent);
   }
   .sc-home-hero-food {display:none}
   .sc-home-hero-copy {
@@ -196,10 +179,21 @@
     background:transparent;
   }
 }
+@media(max-width:640px){
+  .sc-home-hero-collection {
+    bottom:10%;
+    width:min(43%, calc(100% - 220px));
+    height:20%;
+    object-fit:contain;
+    object-position:right bottom;
+    mask-image:
+      linear-gradient(to right, transparent, #000 19%),
+      linear-gradient(to bottom, transparent, #000 24%, #000 86%, transparent);
+  }
+}
 @media(max-width:480px){
   .sc-home-hero {min-height:710px}
   .sc-home-hero-person {top:15%;left:5.5%;width:89%;height:54%}
-  .sc-home-hero-collection {bottom:31%;width:56%;height:20%}
   .sc-home-hero-copy {bottom:4.5%}
   .sc-home-hero-signature{top:24%;right:4%}
   .sc-home-culinary{min-height:560px}
