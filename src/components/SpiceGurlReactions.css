@@ -1,6 +1,5 @@
 /* Sandy Creates: isolated editorial customer-reaction section. */
-.sc-reactions{display:none;background:#06251b;color:#f7efdc;padding:clamp(64px,8vw,126px) 5vw;position:relative;overflow:hidden}
-.sc-reactions--ready{display:block}
+.sc-reactions{background:#06251b;color:#f7efdc;padding:clamp(64px,8vw,126px) 5vw;position:relative;overflow:hidden}
 .sc-reactions:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 82% 25%,rgba(53,99,65,.25),transparent 45%)}
 .sc-reactions__head{position:relative;max-width:1450px;margin:0 auto 34px;display:flex;align-items:end;justify-content:space-between;gap:32px}
 .sc-reactions__head .eyebrow{color:#d6b367;margin-bottom:20px;letter-spacing:.24em}
@@ -12,10 +11,10 @@
 .sc-reactions__arrows button:hover{background:#c7a862;color:#05251b}
 .sc-reactions__rail{position:relative;max-width:1450px;margin:auto;display:flex;gap:clamp(12px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-padding-inline:0;overscroll-behavior-inline:contain}
 .sc-reactions__rail::-webkit-scrollbar{display:none}
-.sc-reactions__item{display:none;flex:0 0 min(25vw,310px);min-width:200px;scroll-snap-align:start}
-.sc-reactions__item.is-ready{display:block}
+.sc-reactions__item{flex:0 0 min(25vw,310px);min-width:200px;scroll-snap-align:start}
 .sc-reactions__media{position:relative;aspect-ratio:9/16;background:#03170f;overflow:hidden}
 .sc-reactions__media video{width:100%;height:100%;object-fit:cover;display:block}
+.sc-reactions__media img{width:100%;height:100%;object-fit:contain;display:block}
 .sc-reactions__sound{position:absolute;bottom:12px;right:12px;width:42px;height:42px;display:grid;place-items:center;background:rgba(1,20,13,.8);color:#f7efdc;border:1px solid rgba(247,239,220,.4);border-radius:50%}
 .sc-reactions__label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#e3d3ad;padding:16px 0 4px}
 .sc-reactions :focus-visible{outline:2px solid #e8c678;outline-offset:3px}

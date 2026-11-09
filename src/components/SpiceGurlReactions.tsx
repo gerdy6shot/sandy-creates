@@ -2,20 +2,30 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Volume2, VolumeX } from 'lucide-react';
 import './SpiceGurlReactions.css';
 
-const clips = [
-  { src: '/videos/spicegurl-reactions/reaction-01.mp4', poster: '/videos/spicegurl-reactions/reaction-01.jpg', label: 'Reaction / 01', alt: 'People reacting to food from Spice Gurl' },
-  { src: '/videos/spicegurl-reactions/reaction-02.mp4', poster: '/videos/spicegurl-reactions/reaction-02.jpg', label: 'Reaction / 02', alt: 'An on-camera Spice Gurl food reaction' },
-  { src: '/videos/spicegurl-reactions/reaction-03.mp4', poster: '/videos/spicegurl-reactions/reaction-03.jpg', label: 'Reaction / 03', alt: 'A person responding to Spice Gurl food' },
-  { src: '/videos/spicegurl-reactions/sandy-cooking.mp4', poster: '/videos/spicegurl-reactions/sandy-cooking.jpg', label: "From Sandy's kitchen", alt: 'Close-up footage of food preparation' },
-] as const;
+type ReactionCard = {
+  photo: string;
+  alt: string;
+  label: string;
+  video?: { src: string; label: string };
+};
+
+const cards: ReactionCard[] = [
+  { photo: '/videos/spicegurl-reactions/reaction-01.jpg', alt: 'Two people holding bites of food outdoors', label: 'The first bite / 01' },
+  { photo: '/videos/spicegurl-reactions/reaction-02.jpg', alt: 'A person in a gray Syracuse sweatshirt at an indoor event', label: 'The first bite / 02' },
+  { photo: '/videos/spicegurl-reactions/reaction-03.jpg', alt: 'A person holding a bite of food and making an OK gesture', label: 'The first bite / 03' },
+  { photo: '/videos/spicegurl-reactions/sandy-cooking.jpg', alt: 'A glazed fruit-topped dessert on a plate', label: 'From Sandy’s kitchen' },
+];
 
 export default function SpiceGurlReactions() {
   const rail = useRef<HTMLDivElement>(null);
   const players = useRef<(HTMLVideoElement | null)[]>([]);
-  const [ready, setReady] = useState<number[]>([]);
+  const [failedVideos, setFailedVideos] = useState<string[]>([]);
   const [soundIndex, setSoundIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    const videos = players.current.filter(video => video !== null);
+    if (videos.length === 0) return;
+
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
         const video = entry.target as HTMLVideoElement;
@@ -25,21 +35,20 @@ export default function SpiceGurlReactions() {
       }
     }, { threshold: [0, 0.45] });
     const onVisibility = () => {
-      if (document.hidden) players.current.forEach(video => video?.pause());
-      else players.current.forEach(video => {
-        if (!video) return;
+      if (document.hidden) videos.forEach(video => video.pause());
+      else videos.forEach(video => {
         const bounds = video.getBoundingClientRect();
         if (bounds.bottom > 0 && bounds.top < window.innerHeight) {
           void video.play().catch(() => {});
         }
       });
     };
-    players.current.forEach(video => { if (video) observer.observe(video); });
+    videos.forEach(video => observer.observe(video));
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       observer.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      players.current.forEach(video => video?.pause());
+      videos.forEach(video => video.pause());
     };
   }, []);
 
@@ -56,29 +65,33 @@ export default function SpiceGurlReactions() {
     rail.current?.scrollBy({left: direction * (rail.current.clientWidth * .82), behavior: 'smooth'});
   }
 
-  return <section className={`sc-reactions ${ready.length ? 'sc-reactions--ready' : ''}`} id="reactions" aria-labelledby="sc-reactions-heading">
+  return <section className="sc-reactions" id="reactions" aria-labelledby="sc-reactions-heading">
     <div className="sc-reactions__head">
       <div>
-        <p className="eyebrow">THE FIRST BITE / REAL PEOPLE</p>
+        <p className="eyebrow">THE FIRST BITE / SPICE GURL</p>
         <h2 id="sc-reactions-heading">People Are <em>LOVING</em> SPICE GURL</h2>
-        <p>Real moments, real food, and the reactions that say it all.</p>
+        <p>A photo gallery from Spice Gurl and Sandy’s kitchen.</p>
       </div>
-      <div className="sc-reactions__arrows" aria-label="Browse reactions">
-        <button type="button" onClick={() => move(-1)} aria-label="Previous reaction"><ArrowLeft size={20}/></button>
-        <button type="button" onClick={() => move(1)} aria-label="Next reaction"><ArrowRight size={20}/></button>
+      <div className="sc-reactions__arrows" aria-label="Browse the gallery">
+        <button type="button" onClick={() => move(-1)} aria-label="Previous card"><ArrowLeft size={20}/></button>
+        <button type="button" onClick={() => move(1)} aria-label="Next card"><ArrowRight size={20}/></button>
       </div>
     </div>
-    <div className="sc-reactions__rail" ref={rail} role="region" tabIndex={0} aria-label="Customer reactions and cooking videos">
-      {clips.map((clip, index) => <article className={`sc-reactions__item ${ready.includes(index) ? 'is-ready' : ''}`} key={clip.src}>
-        <div className="sc-reactions__media">
-          <video ref={el => { players.current[index] = el; }} src={clip.src} poster={clip.poster} autoPlay muted loop playsInline preload="metadata"
-            aria-label={clip.alt} onLoadedMetadata={() => setReady(items => items.includes(index) ? items : [...items, index])}
-            onError={() => setReady(items => items.filter(i => i !== index))} />
-          <button type="button" className="sc-reactions__sound" aria-label={soundIndex === index ? `Mute ${clip.label}` : `Enable sound for ${clip.label}`}
-            aria-pressed={soundIndex === index} onClick={() => toggleSound(index)}>{soundIndex === index ? <Volume2 size={18}/> : <VolumeX size={18}/>}</button>
-        </div>
-        <p className="sc-reactions__label">{clip.label}</p>
-      </article>)}
+    <div className="sc-reactions__rail" ref={rail} role="region" tabIndex={0} aria-label="Spice Gurl gallery">
+      {cards.map((card, index) => {
+        const video = card.video;
+        return <article className="sc-reactions__item" key={card.photo}>
+          <div className="sc-reactions__media">
+            {video && !failedVideos.includes(video.src) ? <>
+              <video ref={el => { players.current[index] = el; }} src={video.src} poster={card.photo} autoPlay muted loop playsInline preload="metadata"
+                aria-label={video.label} onError={() => setFailedVideos(items => [...items, video.src])}/>
+              <button type="button" className="sc-reactions__sound" aria-label={soundIndex === index ? `Mute ${video.label}` : `Enable sound for ${video.label}`}
+                aria-pressed={soundIndex === index} onClick={() => toggleSound(index)}>{soundIndex === index ? <Volume2 size={18}/> : <VolumeX size={18}/>}</button>
+            </> : <img src={card.photo} alt={card.alt} loading="lazy"/>}
+          </div>
+          <p className="sc-reactions__label">{card.label}</p>
+        </article>;
+      })}
     </div>
   </section>;
 }
