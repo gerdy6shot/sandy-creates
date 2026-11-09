@@ -114,6 +114,16 @@
 .sc-home-culinary-copy {z-index:2}
 @media(min-width:801px) {
   .sc-home-hero {margin-top:calc(-1 * clamp(14px, 2vw, 38px))}
+  /* Align the transparent chef portrait to the hero floor, instead of leaving
+     a visible hard edge floating above the next section. */
+  .sc-home-hero-person {
+    top:auto;
+    bottom:0;
+    left:27%;
+    width:45%;
+    height:93%;
+    object-position:center bottom;
+  }
   .sc-home-product .product-art.supplied-product {aspect-ratio:.955}
 }
 @media(max-width:800px) {
