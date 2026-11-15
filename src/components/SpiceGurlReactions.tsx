@@ -10,10 +10,10 @@ type ReactionCard = {
 };
 
 const cards: ReactionCard[] = [
-  { photo: '/videos/spicegurl-reactions/reaction-01.jpg', alt: 'Two people holding bites of food outdoors', label: 'The first bite / 01' },
-  { photo: '/videos/spicegurl-reactions/reaction-02.jpg', alt: 'A person in a gray Syracuse sweatshirt at an indoor event', label: 'The first bite / 02' },
-  { photo: '/videos/spicegurl-reactions/reaction-03.jpg', alt: 'A person holding a bite of food and making an OK gesture', label: 'The first bite / 03' },
-  { photo: '/videos/spicegurl-reactions/sandy-cooking.jpg', alt: 'A glazed fruit-topped dessert on a plate', label: 'From Sandy’s kitchen' },
+  { photo: '/videos/spicegurl-reactions/reaction-01.jpg', alt: 'Two people holding bites of food outdoors', label: 'The first bite / 01', video: { src: '/videos/spicegurl-reactions/reaction-01.mp4', label: 'Spice Gurl tasting reactions from two visitors outdoors' } },
+  { photo: '/videos/spicegurl-reactions/reaction-02.jpg', alt: 'A person in a gray Syracuse sweatshirt at an indoor event', label: 'The first bite / 02', video: { src: '/videos/spicegurl-reactions/reaction-02.mp4', label: 'Spice Gurl tasting reaction at an indoor event' } },
+  { photo: '/videos/spicegurl-reactions/reaction-03.jpg', alt: 'A person holding a bite of food and making an OK gesture', label: 'The first bite / 03', video: { src: '/videos/spicegurl-reactions/reaction-03.mp4', label: 'Spice Gurl tasting reaction from a guest outdoors' } },
+  { photo: '/videos/spicegurl-reactions/sandy-cooking.jpg', alt: 'A glazed fruit-topped dessert on a plate', label: 'From Sandy’s kitchen', video: { src: '/videos/spicegurl-reactions/sandy-cooking.mp4', label: 'Glazed fruit-topped dish from Sandy’s kitchen' } },
 ];
 
 export default function SpiceGurlReactions() {
@@ -70,7 +70,7 @@ export default function SpiceGurlReactions() {
       <div>
         <p className="eyebrow">THE FIRST BITE / SPICE GURL</p>
         <h2 id="sc-reactions-heading">People Are <em>LOVING</em> SPICE GURL</h2>
-        <p>A photo gallery from Spice Gurl and Sandy’s kitchen.</p>
+        <p>Real tasting reactions and food moments from Spice Gurl and Sandy’s kitchen.</p>
       </div>
       <div className="sc-reactions__arrows" aria-label="Browse the gallery">
         <button type="button" onClick={() => move(-1)} aria-label="Previous card"><ArrowLeft size={20}/></button>
