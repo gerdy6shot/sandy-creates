@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import './SpiceGurlReactions.css';
 
-const FILM = '/videos/spicegurl-reactions/spicegurl-one-screen-edit.mp4';
-const POSTER = '/videos/spicegurl-reactions/spicegurl-one-screen-poster.jpg';
+const FILM = '/videos/spicegurl-reactions/spicegurl-cinematic-single-screen.mp4';
+const POSTER = '/videos/spicegurl-reactions/spicegurl-cinematic-poster.jpg';
 
 /** One original-footage film, not four separate cards or a carousel. */
 export default function SpiceGurlReactions() {
