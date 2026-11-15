@@ -1,13 +1,14 @@
-# Cloudflare deployment handoff
+# Cloudflare Pages — Sandy Creates
 
-The approved source is `gerdy6shot/sandy-creates` on GitHub. Deploy with Cloudflare Pages; no further Sites publication is requested.
+**Production**: https://sandcreates.com
+**Project**: `sandy-creates` in Cloudflare Pages
+**Source**: `gerdy6shot/sandy-creates`, production branch `main`
+**Build**: Node 22, `npm ci` and `npm run build`; output `dist`
 
-## Git-connected project
+The production build includes Vite's **public** Supabase configuration from `.env.production`. Do not commit service-role, SMTP, payment or private secrets. The protected OWNER portal uses Supabase Auth and database RLS; a successful build does not establish a working first owner session.
 
-Cloudflare Pages project `sandy-creates` is connected to the GitHub repository with `main` as the production branch. Use repository root, build command `npm run build`, output `dist`, and Node 22. The npm lockfile is committed. The native Pages SPA fallback supports nested client routes because no top-level `404.html` is emitted; `_headers` supplies the current preview headers.
+CI runs on pull requests and pushes to `main`: typecheck, lint, tests and build. Cloudflare's direct Git deployment is still separate from required merge checks; branch protections must be configured in GitHub to make passing CI mandatory *before* a merge.
 
-The site is deployed at https://sandy-creates.pages.dev, with automatic deployment from GitHub enabled. No custom domain is connected. Add sandycreates.com only after verifying ownership and the selected Cloudflare project.
+Payment checkout, public contact submission and scheduled notification delivery are **not enabled**. Keep private server configuration in Cloudflare Pages secrets and do not flip live flags without staging acceptance tests.
 
-The code remains a demonstration: ordering, live admin, inquiry delivery, newsletter and payment processing are not activated. The prepared `functions/api/` directory is Cloudflare Pages Functions source, but its real-provider behavior needs staging verification and the documented server secrets. Do not set live flags simply to launch the visual demo.
-
-Review README.md, ADMIN-GUIDE.md and LAUNCH-REVIEW.md before enabling business operations. Keep service-role/payment/email secrets server-side. No secrets are needed for the visual demo. Preview robots settings intentionally prevent indexing until launch content and policies are approved.
+The site intentionally retains noindex settings before launch. Before enabling search indexing, review canonical URLs, privacy policies, public ordering, and real business contact details.
