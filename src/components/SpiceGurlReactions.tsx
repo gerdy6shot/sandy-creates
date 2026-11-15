@@ -1,120 +1,110 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import './SpiceGurlReactions.css';
 
-type ReactionCard = {
-  photo: string;
-  alt: string;
-  label: string;
-  video?: { src: string; label: string };
-};
+const FILM = '/videos/spicegurl-reactions/spicegurl-one-screen-edit.mp4';
+const POSTER = '/videos/spicegurl-reactions/spicegurl-one-screen-poster.jpg';
 
-const cards: ReactionCard[] = [
-  { photo: '/videos/spicegurl-reactions/reaction-01.jpg', alt: 'Two people holding bites of food outdoors', label: 'The first bite / 01', video: { src: '/videos/spicegurl-reactions/reaction-01.mp4', label: 'Spice Gurl tasting reactions from two visitors outdoors' } },
-  { photo: '/videos/spicegurl-reactions/reaction-02.jpg', alt: 'A person in a gray Syracuse sweatshirt at an indoor event', label: 'The first bite / 02', video: { src: '/videos/spicegurl-reactions/reaction-02.mp4', label: 'Spice Gurl tasting reaction at an indoor event' } },
-  { photo: '/videos/spicegurl-reactions/reaction-03.jpg', alt: 'A person holding a bite of food and making an OK gesture', label: 'The first bite / 03', video: { src: '/videos/spicegurl-reactions/reaction-03.mp4', label: 'Spice Gurl tasting reaction from a guest outdoors' } },
-  { photo: '/videos/spicegurl-reactions/sandy-cooking.jpg', alt: 'A glazed fruit-topped dessert on a plate', label: 'From Sandy’s kitchen', video: { src: '/videos/spicegurl-reactions/sandy-cooking.mp4', label: 'Glazed fruit-topped dish from Sandy’s kitchen' } },
-];
-
+/** One original-footage film, not four separate cards or a carousel. */
 export default function SpiceGurlReactions() {
-  const rail = useRef<HTMLDivElement>(null);
-  const players = useRef<(HTMLVideoElement | null)[]>([]);
-  const [failedVideos, setFailedVideos] = useState<string[]>([]);
-  const [soundIndex, setSoundIndex] = useState<number | null>(null);
-  const [pausedVideos, setPausedVideos] = useState<number[]>([]);
-  const [manuallyPlaying, setManuallyPlaying] = useState<number[]>([]);
-  const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [reducedMotion, setReducedMotion] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  const [manuallyStarted, setManuallyStarted] = useState(false);
+  const [manuallyPaused, setManuallyPaused] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const updatePreference = () => setReducedMotion(preference.matches);
-    preference.addEventListener('change', updatePreference);
-    return () => preference.removeEventListener('change', updatePreference);
+    const onChange = () => setReducedMotion(preference.matches);
+    preference.addEventListener('change', onChange);
+    return () => preference.removeEventListener('change', onChange);
   }, []);
 
   useEffect(() => {
-    const videos = players.current.filter(video => video !== null);
-    if (videos.length === 0) return;
+    if (failed) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        const video = entry.target as HTMLVideoElement;
-        const index = players.current.indexOf(video);
-        if (entry.intersectionRatio >= 0.45 && !document.hidden && (!reducedMotion || manuallyPlaying.includes(index)) && !pausedVideos.includes(index)) {
-          void video.play().catch(() => { /* Browser policies may block autoplay. */ });
-        } else video.pause();
-      }
-    }, { threshold: [0, 0.45] });
-    const onVisibility = () => {
-      if (document.hidden) videos.forEach(video => video.pause());
-      else videos.forEach(video => {
-        const bounds = video.getBoundingClientRect();
-        if (bounds.bottom > 0 && bounds.top < window.innerHeight && (!reducedMotion || manuallyPlaying.includes(players.current.indexOf(video))) && !pausedVideos.includes(players.current.indexOf(video))) {
-          void video.play().catch(() => {});
-        }
+    function syncPlayback() {
+      if (!video) return;
+      const bounds = video.getBoundingClientRect();
+      const visible = bounds.bottom > window.innerHeight * 0.25 &&
+        bounds.top < window.innerHeight * 0.75;
+      const mayPlay = visible && !document.hidden && !manuallyPaused &&
+        (!reducedMotion || manuallyStarted);
+      if (mayPlay) void video.play().catch(() => {
+        // Native autoplay restrictions may require the visitor to click Play.
       });
-    };
-    videos.forEach(video => observer.observe(video));
-    document.addEventListener('visibilitychange', onVisibility);
+      else video.pause();
+    }
+
+    const observer = new IntersectionObserver(syncPlayback, { threshold: [0, 0.35, 0.7] });
+    observer.observe(video);
+    document.addEventListener('visibilitychange', syncPlayback);
+    window.addEventListener('resize', syncPlayback);
+    syncPlayback();
     return () => {
       observer.disconnect();
-      document.removeEventListener('visibilitychange', onVisibility);
-      videos.forEach(video => video.pause());
+      document.removeEventListener('visibilitychange', syncPlayback);
+      window.removeEventListener('resize', syncPlayback);
+      video.pause();
     };
-  }, [pausedVideos, reducedMotion, manuallyPlaying]);
+  }, [failed, reducedMotion, manuallyPaused, manuallyStarted]);
 
-  function togglePlayback(index: number) {
-    const player = players.current[index];
-    if (!player) return;
-    const currentlyPaused = pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index));
-    setPausedVideos(items => currentlyPaused ? items.filter(item => item !== index) : [...items, index]);
-    setManuallyPlaying(items => currentlyPaused ? [...new Set([...items, index])] : items.filter(item => item !== index));
-    if (currentlyPaused) void player.play().catch(() => {});
-    else player.pause();
-  }
-
-  function toggleSound(index: number) {
-    const next = soundIndex === index ? null : index;
-    players.current.forEach((video, i) => {
-      if (video) video.muted = i !== next;
-    });
-    setSoundIndex(next);
-    if (next !== null && !pausedVideos.includes(next) && !reducedMotion) void players.current[next]?.play().catch(() => {});
-  }
-
-  function move(direction: -1 | 1) {
-    rail.current?.scrollBy({left: direction * (rail.current.clientWidth * .82), behavior: 'smooth'});
+  function togglePlayback() {
+    const video = videoRef.current;
+    if (!video) return;
+    if (playing) {
+      setManuallyPaused(true);
+      video.pause();
+    } else {
+      setManuallyStarted(true);
+      setManuallyPaused(false);
+      void video.play().catch(() => {});
+    }
   }
 
   return <section className="sc-reactions" id="reactions" aria-labelledby="sc-reactions-heading">
     <div className="sc-reactions__head">
-      <div>
-        <p className="eyebrow">THE FIRST BITE / SPICE GURL</p>
-        <h2 id="sc-reactions-heading">People Are <em>LOVING</em> SPICE GURL</h2>
-        <p>Real tasting reactions and food moments from Spice Gurl and Sandy’s kitchen.</p>
-      </div>
-      <div className="sc-reactions__arrows" aria-label="Browse the gallery">
-        <button type="button" onClick={() => move(-1)} aria-label="Previous card"><ArrowLeft size={20}/></button>
-        <button type="button" onClick={() => move(1)} aria-label="Next card"><ArrowRight size={20}/></button>
-      </div>
+      <p className="eyebrow">THE FIRST BITE / SPICE GURL</p>
+      <h2 id="sc-reactions-heading">People Are <em>LOVING</em> SPICE GURL</h2>
     </div>
-    <div className="sc-reactions__rail" ref={rail} role="region" tabIndex={0} aria-label="Spice Gurl gallery">
-      {cards.map((card, index) => {
-        const video = card.video;
-        return <article className="sc-reactions__item" key={card.photo}>
-          <div className="sc-reactions__media">
-            {video && !failedVideos.includes(video.src) ? <>
-              <video ref={el => { players.current[index] = el; }} src={video.src} poster={card.photo} autoPlay={!reducedMotion && !pausedVideos.includes(index)} muted loop playsInline preload={reducedMotion ? 'none' : 'metadata'}
-                aria-label={video.label} onError={() => setFailedVideos(items => [...items, video.src])}/>
-              <button type="button" className="sc-reactions__pause" aria-label={pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index)) ? `Play ${video.label}` : `Pause ${video.label}`}
-                aria-pressed={pausedVideos.includes(index)} onClick={() => togglePlayback(index)}>{pausedVideos.includes(index) || reducedMotion && players.current[index]?.paused ? <Play size={18}/> : <Pause size={18}/>}</button>
-              <button type="button" className="sc-reactions__sound" aria-label={soundIndex === index ? `Mute ${video.label}` : `Enable sound for ${video.label}`}
-                aria-pressed={soundIndex === index} onClick={() => toggleSound(index)}>{soundIndex === index ? <Volume2 size={18}/> : <VolumeX size={18}/>}</button>
-            </> : <img src={card.photo} alt={card.alt} loading="lazy"/>}
+    <div className="sc-reactions__screen">
+      {failed
+        ? <img className="sc-reactions__poster" src={POSTER} alt="Spice Gurl food and original tasting reactions" />
+        : <>
+          <video
+            ref={videoRef}
+            src={FILM}
+            poster={POSTER}
+            muted={muted}
+            loop
+            playsInline
+            preload={reducedMotion ? 'none' : 'metadata'}
+            aria-label="Edited original Spice Gurl tasting reactions and food footage"
+            aria-describedby="sc-reactions-description"
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onError={() => setFailed(true)}
+          />
+          <div className="sc-reactions__controls" aria-label="Film controls">
+            <button type="button" onClick={togglePlayback}
+              aria-label={playing ? 'Pause Spice Gurl film' : 'Play Spice Gurl film'}>
+              {playing ? <Pause aria-hidden="true" size={19}/> : <Play aria-hidden="true" size={19}/>}
+            </button>
+            <button type="button" onClick={() => setMuted(value => !value)}
+              aria-label={muted ? 'Turn film sound on' : 'Mute film'}>
+              {muted ? <VolumeX aria-hidden="true" size={19}/> : <Volume2 aria-hidden="true" size={19}/>}
+            </button>
           </div>
-          <p className="sc-reactions__label">{card.label}</p>
-        </article>;
-      })}
+        </>}
+      <p id="sc-reactions-description" className="sr-only">
+        A continuous 16:9 film edited from original Spice Gurl footage: a dish from Sandy’s kitchen, two guests tasting food outdoors, a visitor at an indoor event and a guest tasting outdoors.
+      </p>
     </div>
   </section>;
 }
