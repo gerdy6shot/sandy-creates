@@ -154,7 +154,7 @@ revoke all on function public.consume_rate_limit(text),public.save_inquiry(jsonb
 grant execute on function public.consume_rate_limit(text),public.save_inquiry(jsonb,boolean),public.release_expired_reservations(),public.reserve_retail_order(jsonb,text,text),public.attach_checkout(uuid,text),public.finalize_payment(text,uuid,text,integer,text,boolean),public.claim_notification() to service_role;
 
 -- Restricted upload bucket. The frontend demo stores only local sample images.
-insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('product-images','product-images',true,2097152,array['image/jpeg','image/png','image/webp']);
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values('product-images','product-images',true,2097152,array['image/jpeg','image/png','image/webp']) on conflict (id) do nothing;
 create policy admin_image_upload on storage.objects for insert to authenticated with check(bucket_id='product-images' and (select private.is_admin()));
 create policy admin_image_update on storage.objects for update to authenticated using(bucket_id='product-images' and (select private.is_admin())) with check(bucket_id='product-images' and (select private.is_admin()));
 create policy admin_image_delete on storage.objects for delete to authenticated using(bucket_id='product-images' and (select private.is_admin()));
@@ -164,3 +164,4 @@ create policy product_image_read on storage.objects for select to authenticated 
 create function public.is_authorized_admin() returns boolean language sql stable security invoker set search_path='' as $$ select private.is_admin(); $$;
 revoke all on function public.is_authorized_admin() from public,anon;
 grant execute on function public.is_authorized_admin() to authenticated;
+

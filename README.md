@@ -39,7 +39,7 @@ npm run preview
 - `src/data/demo.ts` — historical presentation reference data, **not** the live catalog.
 - `src/lib/preorder-request.ts` — builds email-only preorder drafts; does not create orders.
 - `server/api.ts`, `functions/api/` — prepared gated functions; inquiries, notifications, and checkout are **not enabled**.
-- `supabase/migrations/` — original schema source; **remote migrations were applied** and are separately tracked by Supabase. The historical SQL is a one-time baseline, not safely re-runnable.
+- `supabase/migrations/` — **all six exact applied remote migrations**, with timestamped versions matching the Supabase migration history. See `supabase/README.md` for restoration limits and provenance.
 - `docs/ADMIN-GUIDE.md` — real owner portal behavior and remaining limitations.
 - `.github/workflows/verify-owner-portal.yml` — typecheck, lint, tests and build on main/PRs.
 
@@ -53,11 +53,11 @@ Replace stock images in `public/images/` with approved images and update meaning
 
 **Connected project:** `ncphseqscanghqdgzetf` — https://supabase.com/dashboard/project/ncphseqscanghqdgzetf
 
-Applied remote migrations include `sandy_creates_core`, `sandy_creates_verified_owner_bootstrap`, `sandy_creates_existing_catalog_seed`, and `sandy_creates_published_events_access`. The storefront reads published products, product variants, product photos, site copy, availability and approved public event fields. RLS protects private orders, inquiries, admin roles and storage modifications. Event locations are private.
+The exact six applied remote migrations are checked into `supabase/migrations/` (core, verified owner bootstrap, catalog seed, published events access, anonymous catalog-column minimization and public catalog-sort permission). The storefront reads published products, product variants, product photos, site copy, availability and approved public event fields. RLS protects private orders, inquiries, admin roles and storage modifications. Event locations are private.
 
-The owner sign-in sends a Supabase email OTP/magic link. Only a verified Auth user matching the server-side authorized owner identity can be provisioned an admin role. Sign-up restrictions should be tightened **after** the first owner account has been provisioned and tested; public sign-ups still require review. MFA for the owner is recommended.
+The owner sign-in sends a Supabase email OTP/magic link. Only a verified Auth user matching the server-side authorized owner identity can be provisioned an admin role. **As of the November 15 live audit there are zero Auth users and zero owner roles.** Public sign-ups are not verified closed. Provision and verify the owner account, disable public signup in Supabase Auth settings, then change the sign-in flow to require an existing user. MFA for the owner is recommended.
 
-**Disabled:** checkout, payment capture and inquiry submission. The maintenance runner is *defined but not scheduled*. Configure and test a dedicated protected schedule only when email/checkout go live. The remote baseline migration is not idempotent: do not rerun it against an existing project. Commit additive forward-only migrations, test in staging, and capture rollback guidance for each new migration. Production deployments use GitHub `main` and Cloudflare Pages.
+**Disabled:** checkout, payment capture and inquiry submission. The maintenance runner is *defined but not scheduled*. Configure and test a dedicated protected schedule only when email/checkout go live. The core baseline migration is not idempotent: do not rerun it against the existing project. Commit additive forward-only migrations, test in staging, and capture rollback guidance for each new migration. Production deployments use GitHub `main` and Cloudflare Pages.
 
 **Search indexing:** noindex remains intentional before launch. Review canonical metadata, policies and business details before opening indexing.
 

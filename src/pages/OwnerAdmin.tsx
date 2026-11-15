@@ -46,7 +46,7 @@ export function OwnerLogin(){
   try{
    const {error}=await sandySupabase.auth.signInWithOtp({
     email:email.trim().toLowerCase(),
-    options:{emailRedirectTo:window.location.origin+'/admin',shouldCreateUser:true},
+    options:{emailRedirectTo:window.location.origin+'/admin',shouldCreateUser:false},
    });
    if(error)throw error;
    setMessage('Check the owner email inbox for the secure sign-in link. The link is single-use.');
@@ -59,7 +59,7 @@ export function OwnerLogin(){
   <p>Secure owner access to products, orders, inquiries, and website content.</p>
   {checking?<p role="status">Checking your session…</p>:<form className="studio-panel editor-form" onSubmit={e=>void sendLink(e)}>
    <label className="editor-form" htmlFor="owner-sign-in-email">OWNER EMAIL<input id="owner-sign-in-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="Your authorized email address" /></label>
-   <p className="small-copy">A secure email link signs you in. No password is shared with the website or stored in source code.</p>
+   <p className="small-copy">A secure email link signs in an existing authorized account. Registration is not available here. No password is stored in website source.</p>
    <button type="submit" className="button" disabled={sending}>{sending?'Sending…':'Email my secure sign-in link'} <ArrowUpRight size={16}/></button>
    <p role="status" aria-live="polite">{message}</p>
   </form>}

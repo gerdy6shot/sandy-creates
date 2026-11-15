@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Volume2, VolumeX } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import './SpiceGurlReactions.css';
 
 type ReactionCard = {
@@ -21,6 +21,16 @@ export default function SpiceGurlReactions() {
   const players = useRef<(HTMLVideoElement | null)[]>([]);
   const [failedVideos, setFailedVideos] = useState<string[]>([]);
   const [soundIndex, setSoundIndex] = useState<number | null>(null);
+  const [pausedVideos, setPausedVideos] = useState<number[]>([]);
+  const [manuallyPlaying, setManuallyPlaying] = useState<number[]>([]);
+  const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updatePreference = () => setReducedMotion(preference.matches);
+    preference.addEventListener('change', updatePreference);
+    return () => preference.removeEventListener('change', updatePreference);
+  }, []);
 
   useEffect(() => {
     const videos = players.current.filter(video => video !== null);
@@ -29,7 +39,8 @@ export default function SpiceGurlReactions() {
     const observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
         const video = entry.target as HTMLVideoElement;
-        if (entry.intersectionRatio >= 0.45 && !document.hidden) {
+        const index = players.current.indexOf(video);
+        if (entry.intersectionRatio >= 0.45 && !document.hidden && (!reducedMotion || manuallyPlaying.includes(index)) && !pausedVideos.includes(index)) {
           void video.play().catch(() => { /* Browser policies may block autoplay. */ });
         } else video.pause();
       }
@@ -38,7 +49,7 @@ export default function SpiceGurlReactions() {
       if (document.hidden) videos.forEach(video => video.pause());
       else videos.forEach(video => {
         const bounds = video.getBoundingClientRect();
-        if (bounds.bottom > 0 && bounds.top < window.innerHeight) {
+        if (bounds.bottom > 0 && bounds.top < window.innerHeight && (!reducedMotion || manuallyPlaying.includes(players.current.indexOf(video))) && !pausedVideos.includes(players.current.indexOf(video))) {
           void video.play().catch(() => {});
         }
       });
@@ -50,7 +61,17 @@ export default function SpiceGurlReactions() {
       document.removeEventListener('visibilitychange', onVisibility);
       videos.forEach(video => video.pause());
     };
-  }, []);
+  }, [pausedVideos, reducedMotion, manuallyPlaying]);
+
+  function togglePlayback(index: number) {
+    const player = players.current[index];
+    if (!player) return;
+    const currentlyPaused = pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index));
+    setPausedVideos(items => currentlyPaused ? items.filter(item => item !== index) : [...items, index]);
+    setManuallyPlaying(items => currentlyPaused ? [...new Set([...items, index])] : items.filter(item => item !== index));
+    if (currentlyPaused) void player.play().catch(() => {});
+    else player.pause();
+  }
 
   function toggleSound(index: number) {
     const next = soundIndex === index ? null : index;
@@ -58,7 +79,7 @@ export default function SpiceGurlReactions() {
       if (video) video.muted = i !== next;
     });
     setSoundIndex(next);
-    if (next !== null) void players.current[next]?.play().catch(() => {});
+    if (next !== null && !pausedVideos.includes(next) && !reducedMotion) void players.current[next]?.play().catch(() => {});
   }
 
   function move(direction: -1 | 1) {
@@ -83,8 +104,10 @@ export default function SpiceGurlReactions() {
         return <article className="sc-reactions__item" key={card.photo}>
           <div className="sc-reactions__media">
             {video && !failedVideos.includes(video.src) ? <>
-              <video ref={el => { players.current[index] = el; }} src={video.src} poster={card.photo} autoPlay muted loop playsInline preload="metadata"
+              <video ref={el => { players.current[index] = el; }} src={video.src} poster={card.photo} autoPlay={!reducedMotion && !pausedVideos.includes(index)} muted loop playsInline preload={reducedMotion ? 'none' : 'metadata'}
                 aria-label={video.label} onError={() => setFailedVideos(items => [...items, video.src])}/>
+              <button type="button" className="sc-reactions__pause" aria-label={pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index)) ? `Play ${video.label}` : `Pause ${video.label}`}
+                aria-pressed={pausedVideos.includes(index)} onClick={() => togglePlayback(index)}>{pausedVideos.includes(index) || reducedMotion && players.current[index]?.paused ? <Play size={18}/> : <Pause size={18}/>}</button>
               <button type="button" className="sc-reactions__sound" aria-label={soundIndex === index ? `Mute ${video.label}` : `Enable sound for ${video.label}`}
                 aria-pressed={soundIndex === index} onClick={() => toggleSound(index)}>{soundIndex === index ? <Volume2 size={18}/> : <VolumeX size={18}/>}</button>
             </> : <img src={card.photo} alt={card.alt} loading="lazy"/>}
