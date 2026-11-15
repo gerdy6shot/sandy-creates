@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Check, Mail, Minus, Plus, ShoppingBag } from 'lucide-react';
 import type { Product } from '../lib/models';
@@ -16,6 +16,11 @@ export default function PreorderStorefront({ products }: { products: Product[] }
   const [reviewing, setReviewing] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
   const collection = products.filter(p => p.published && (p.variants[0]?.price ?? 0) > 0);
+  const presetProductId = collection.find(p => p.slug === searchParams.get('product'))?.id;
+  useEffect(() => {
+    if (!presetProductId) return;
+    setQuantities(current => current[presetProductId] > 0 ? current : {...current, [presetProductId]: 1});
+  }, [presetProductId]);
   const selected = collection.filter(p => quantities[p.id] > 0);
   const count = selected.reduce((sum, p) => sum + quantities[p.id], 0);
   const subtotal = selected.reduce((sum, p) => sum + (p.variants[0]?.price ?? 0) * quantities[p.id], 0);
@@ -37,7 +42,7 @@ export default function PreorderStorefront({ products }: { products: Product[] }
     <section className="section shop-section preorder-storefront" id="preorder-storefront" aria-labelledby="preorder-title">
       <div className="section-heading">
         <div><p className="eyebrow">THE SPICE GURL COLLECTION</p><h2 id="preorder-title">Your next<br /><i>flavor obsession.</i></h2></div>
-        <p className="preorder-intro">Discover the flavors in Sandy’s collection. Explore the collection and choose your favorites.</p>
+        <p className="preorder-intro">Choose your Spice Gurl favorites, then email your preorder request directly to Sandy.</p>
       </div>
       <div className="preorder-note"><span className="eyebrow">PREORDER BY EMAIL</span><p>Choose your favorites and email your preorder request to Sandy. She’ll confirm sizes, availability, the final price and fulfillment details. No payment or stock reservation is made on this website.</p></div>
       {count > 0 && <a className="preorder-mobile-summary" href="#preorder-summary-title"><ShoppingBag size={16} aria-hidden="true" />{count} {count === 1 ? 'item' : 'items'} · {money(subtotal)} <span>View preorder ↓</span></a>}
@@ -68,16 +73,16 @@ export default function PreorderStorefront({ products }: { products: Product[] }
           {selected.length > 0 && <ul className="preorder-lines">{selected.map(p => <li key={p.id}><span>{p.name} × {quantities[p.id]}</span><span>{money((p.variants[0]?.price ?? 0) * quantities[p.id])}</span></li>)}</ul>}
           <div className="preorder-total"><span>Estimated subtotal</span><strong>{money(subtotal)}</strong></div>
           <p className="small-copy">USD. Taxes and fulfillment costs are not included. Sandy will confirm your final total.</p>
-          <button className="button" disabled={!count} onClick={() => setReviewing(true)}>Review email request <ArrowUpRight size={16} aria-hidden="true" /></button>
+          <button className="button" disabled={!count} onClick={() => setReviewing(true)}>Review email preorder <ArrowUpRight size={16} aria-hidden="true" /></button>
           {reviewing && draft && <div className="preorder-review">
             <h4>Your email draft</h4>
-            <p className="small-copy">Review your request below, then open your email app to add your name and send it. Nothing has been sent by this website.</p>
+            <p className="small-copy">Review the request, open your email app, add your name, and press Send. The website does not send the message automatically.</p>
             <textarea aria-label="Preorder email draft" readOnly value={draft.body} rows={12} />
-            <a className="button" href={mailto}>Open email draft <Mail size={16} aria-hidden="true" /></a>
+            <a className="button" href={mailto}>Email preorder to Sandy <Mail size={16} aria-hidden="true" /></a>
             <button className="preorder-copy" onClick={copyRequest}>Copy request</button><p role="status" className="small-copy">{copyStatus}</p>
             <p className="small-copy">No email app? Copy the request and send it to <a href={email}>info@spicegurl.store</a>.</p>
           </div>}
-          <p className="caption">Emailing a request does not confirm an order. No payment is collected here. Your selections last for this visit only and are separate from the demo bag.</p>
+          <p className="caption">The email must be sent from your email app. Sandy will reply to confirm whether the preorder can be accepted. No payment or stock reservation takes place on this website.</p>
         </aside>
       </div>
       <div className="preorder-steps"><div><span className="eyebrow">01 / CHOOSE</span><h3>Find your flavor.</h3><p>Pick your products and quantities.</p></div><div><span className="eyebrow">02 / REVIEW</span><h3>Make it your own.</h3><p>Review your selection and estimated product subtotal.</p></div><div><span className="eyebrow">03 / CONNECT</span><h3>Send it to Sandy.</h3><p>Send your email request. Sandy confirms the details with you before accepting an order.</p></div></div>
