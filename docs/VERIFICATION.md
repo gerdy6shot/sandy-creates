@@ -1,4 +1,7 @@
-# Verification — 22 October 2026
+# Verification — historical October 22, 2026 local-only checks
+
+> **Historical record, not current deployment status.** These October checks predate the November 2026 Supabase and Cloudflare production integration. For current facts see `README.md`, `docs/CLOUDFLARE-DEPLOYMENT.md`, and `supabase/README.md`. The live canonical domain is **https://sandcreates.com**, not `sandycreates.com`.
+
 
 ## Implemented and verified locally
 
@@ -40,7 +43,7 @@
 - Newsletter subscription provider (signup not offered).
 - Real Supabase Auth/Storage/RLS staging tests, actual concurrent database connections, provider sandbox/webhook delivery and email-failure integration tests.
 - Screen-reader audit, automated accessibility engine, exhaustive keyboard audit, Lighthouse and real-device testing.
-- sandycreates.com DNS/custom-domain setup, production policy approval and public launch.
+- October-only `sandycreates.com` DNS proposal; the actual connected domain is now `sandcreates.com`. Production policy approval and public launch checks remain.
 
 A frontend build is not proof of production readiness. A local SQL test is not a remote migration or provider acceptance test.
 
