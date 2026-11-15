@@ -6,12 +6,12 @@ import type { CartLine, DemoState, Product } from './models';
 
 const CART_KEY = 'sandy-creates-bag-v1';
 
-type DbVariant = { id:string; size:string; price:number; sku:string; inventory:number; active:boolean };
+type DbVariant = { id:string; size:string; price:number; active:boolean };
 type DbImage = {path:string;alt:string;position:number};
 type DbProduct = {
  id:string; slug:string; name:string; category:Product['category']; short_description:string;
  description:string; ingredients:string; allergens:string; storage:string;
- shipping:boolean; pickup:boolean; published:boolean; featured:boolean;
+ published:boolean; featured:boolean;
  product_variants:DbVariant[]; product_images:DbImage[];
 };
 
@@ -21,13 +21,13 @@ function fromDatabase(product:DbProduct):Product {
  const image=originalImage?.path?.startsWith('/') ? originalImage.path :
   originalImage?.path ? sandySupabase.storage.from('product-images').getPublicUrl(originalImage.path).data.publicUrl : undefined;
  const variants=product.product_variants?.filter(v=>v.active).map(v=>({
-  id:v.id,size:v.size,price:v.price,sku:v.sku,inventory:v.inventory,
+  id:v.id,size:v.size,price:v.price,sku:'',inventory:0,
  })) ?? [];
  return {
   id:product.id,slug:product.slug,name:product.name,category:product.category,currency:'USD',
   short:product.short_description,description:product.description,ingredients:product.ingredients,
   allergens:product.allergens,storage:product.storage,published:product.published,featured:product.featured,
-  shipping:product.shipping,pickup:product.pickup,color:original?.color ?? '#6f7a4f',
+  shipping:false,pickup:false,color:original?.color ?? '#6f7a4f',
   image:image ?? original?.image,imageAlt:originalImage?.alt ?? original?.imageAlt,
   imageTreatment:'supplied-product',pricePending:variants.length===0,
   variants:variants.length?variants:[{id:'pending-'+product.id,size:'Size to be confirmed',price:0,sku:'NOT-FOR-SALE',inventory:0}],
@@ -49,25 +49,28 @@ const Context=createContext<null|{
 }>(null);
 
 export function Store({children}:{children:ReactNode}) {
- const [data,setData]=useState<DemoState>(()=>structuredClone(initialDemo));
+ const [data,setData]=useState<DemoState>(()=>({...structuredClone(initialDemo),products:[],events:[],inquiries:[]}));
  const [cart,setCart]=useState<CartLine[]>(readCart);
  const [storageError,setStorageError]=useState(false);
  useEffect(()=>{
   let alive=true;
   async function load() {
    const [products,content,availability,events]=await Promise.all([
-    sandySupabase.from('products').select('*,product_variants(*),product_images(*)').eq('published',true).order('created_at',{ascending:true}),
+    sandySupabase.from('products').select('id,slug,name,category,short_description,description,ingredients,allergens,storage,published,featured,product_variants(id,size,price,active),product_images(path,alt,position)').eq('published',true).order('created_at',{ascending:true}),
     sandySupabase.from('site_content').select('key,value').eq('published',true),
-    sandySupabase.from('availability').select('*').eq('id',true).maybeSingle(),
+    sandySupabase.from('availability').select('id,retail_paused,culinary_paused,timezone,daily_capacity,lead_days,blocked_dates,pickup_windows,message').eq('id',true).maybeSingle(),
     sandySupabase.from('events').select('id,slug,title,description,start_at,end_at,timezone,published,image_path').eq('published',true),
    ]);
    if(!alive)return;
-   if(products.error) { console.warn('Public catalog unavailable:',products.error.message);return; }
+   if(products.error) throw products.error;
+   if(content.error) console.warn('Public content unavailable:',content.error.message);
+   if(availability.error) console.warn('Public availability unavailable:',availability.error.message);
+   if(events.error) console.warn('Public events unavailable:',events.error.message);
    const actual=(products.data??[]) as DbProduct[];
    setData(old=>({
     ...old,
     products:actual.map(fromDatabase),
-    events:events.error?old.events:(events.data??[]).map(e=>({
+    events:events.error?[]:(events.data??[]).map(e=>({
       id:e.id,slug:e.slug,title:e.title,description:e.description,
       start:e.start_at??'',end:e.end_at??'',timezone:e.timezone,
       location:'',published:e.published,image:e.image_path??'',
@@ -90,7 +93,11 @@ export function Store({children}:{children:ReactNode}) {
     }:old.settings,
    }));
   }
-  void load();
+  void load().catch(error=>{
+   if(!alive)return;
+   console.error('Sandy Creates public data could not load:',error);
+   setData(old=>({...old,products:[],events:[],inquiries:[]}));
+  });
   return ()=>{alive=false;};
  },[]);
  useEffect(()=>{
