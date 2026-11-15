@@ -1,0 +1,64 @@
+name: Build single-screen Spice Gurl film
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/build-spicegurl-film.py
+      - .github/workflows/build-spicegurl-film.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  edit-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Render 16:9 single-shot film from approved footage
+        run: python3 scripts/build-spicegurl-film.py
+
+      - name: Point existing single-player component to finished edit
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('src/components/SpiceGurlReactions.tsx')
+          s = p.read_text()
+          old_film = '/videos/spicegurl-reactions/spicegurl-one-screen-edit.mp4'
+          old_poster = '/videos/spicegurl-reactions/spicegurl-one-screen-poster.jpg'
+          new_film = '/videos/spicegurl-reactions/spicegurl-cinematic-single-screen.mp4'
+          new_poster = '/videos/spicegurl-reactions/spicegurl-cinematic-poster.jpg'
+          if old_film not in s and new_film not in s:
+              raise SystemExit('Unexpected film source, no change made')
+          if old_poster not in s and new_poster not in s:
+              raise SystemExit('Unexpected poster source, no change made')
+          p.write_text(s.replace(old_film, new_film).replace(old_poster, new_poster))
+          PY
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify source and production build
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run build
+          ffprobe -v error -show_entries format=duration:stream=width,height,codec_name -of json public/videos/spicegurl-reactions/spicegurl-cinematic-single-screen.mp4
+
+      - name: Commit only edited media and existing player source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/SpiceGurlReactions.tsx \
+            public/videos/spicegurl-reactions/spicegurl-cinematic-single-screen.mp4 \
+            public/videos/spicegurl-reactions/spicegurl-cinematic-poster.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "fix: replace Spice Gurl portrait montage with full-frame film"
+            git push origin HEAD:main
+          fi
