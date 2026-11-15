@@ -175,22 +175,34 @@
 .sc-culinary-section-head--sweet > p { color:#48574d; }
 .sc-culinary-award {
   display:grid;
-  grid-template-columns:minmax(0,.84fr) minmax(0,1.16fr);
+  grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);
   gap:clamp(30px,5.5vw,95px);
-  align-items:center;
+  align-items:start;
   border-top:1px solid rgba(64,68,46,.23);
   padding-top:clamp(25px,3vw,45px);
 }
+/* The source is a portrait social screenshot. Frame its original photography,
+   retaining Sandy's full face and ribbon while excluding the baked-in social UI.
+   The original asset is not modified. */
 .sc-culinary-award__portrait {
+  position:relative;
+  justify-self:start;
+  width:100%;
+  max-width:460px;
   min-width:0;
-  height:clamp(355px,34vw,510px);
+  height:auto;
+  aspect-ratio:4 / 5;
   overflow:hidden;
   background:#c3d0b4;
 }
 .sc-culinary-award__portrait img {
-  height:100%;
-  object-fit:cover;
-  object-position:center 36%;
+  position:absolute;
+  top:0;
+  left:-5%;
+  width:130%;
+  max-width:none;
+  height:auto;
+  display:block;
 }
 .sc-culinary-award__story {
   max-width:620px;
@@ -284,7 +296,7 @@
   .sc-culinary-section-head > p { margin-top:18px; }
   .sc-culinary-food__grid { grid-template-columns:1fr 1fr; gap:26px 18px; }
   .sc-culinary-award { grid-template-columns:1fr; gap:29px; }
-  .sc-culinary-award__portrait { max-width:540px; height:450px; }
+  .sc-culinary-award__portrait { max-width:460px; height:auto; }
   .sc-culinary-inquiry { grid-template-columns:1fr; gap:16px; }
 }
 @media (max-width:520px) {
@@ -296,7 +308,7 @@
   .sc-culinary-food__body { padding-top:13px; }
   .sc-culinary-food__body h3 { font-size:31px; }
   .sc-culinary-section-head h2 { font-size:clamp(39px,9vw,52px); }
-  .sc-culinary-award__portrait { height:390px; }
+  .sc-culinary-award__portrait { max-width:100%; height:auto; }
   .sc-culinary-award__story h3 { font-size:clamp(35px,8.5vw,49px); }
   .sc-culinary-desserts { grid-template-columns:1fr; gap:30px; }
   .sc-culinary-desserts img { aspect-ratio:1.25; }
