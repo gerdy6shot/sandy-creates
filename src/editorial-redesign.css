@@ -229,3 +229,54 @@ h1,h2,h3{color:#f5edda}
 .studio-login .studio-panel [role="status"] {
   color:#20372d;
 }
+
+
+/* About Sandy: one focused editorial portrait and biography, no duplicate sections. */
+.sc-about-page {background:#061f17;color:#f5ecda;min-height:60vh}
+.sc-about-intro {
+ display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+ align-items:center;gap:clamp(38px,6.5vw,115px);
+ max-width:1500px;margin:0 auto;
+ padding:clamp(55px,6vw,94px) 7.5vw clamp(65px,7vw,100px);
+}
+.sc-about-photo,.sc-about-content {min-width:0}
+.sc-about-photo .sandy-portrait {margin:0}
+.sc-about-photo .sandy-portrait img {
+ display:block;width:100%;height:auto;max-width:560px;
+}
+.sc-about-photo .sandy-portrait figcaption {display:none}
+.sc-about-content .eyebrow,
+.sc-about-gatherings>.eyebrow,
+.sc-about-event .eyebrow {color:#dfbc79;font-size:11px;letter-spacing:.17em}
+.sc-about-content h1 {font:400 clamp(58px,6.4vw,104px)/.98 Georgia,serif;letter-spacing:-.06em;color:#f5ecda;margin:22px 0 28px}
+.sc-about-content h1 i {color:#dfbc79;font-weight:400}
+.sc-about-content>p:not(.eyebrow) {
+ color:#e0d8c8;font-size:clamp(15px,1.16vw,18px);
+ line-height:1.7;max-width:610px;margin:0 0 17px;
+}
+.sc-about-links {display:flex;gap:28px;flex-wrap:wrap;margin:25px 0 30px}
+.sc-about-links a,.sc-about-recognition a {
+ color:#e7c481;font-size:13px;font-weight:600;
+ text-decoration:none;border-bottom:1px solid #c5a15e;padding-bottom:6px
+}
+.sc-about-links a:hover,.sc-about-recognition a:hover {color:#f8e1ae}
+.sc-about-content>p.sc-about-recognition {
+ font-size:13px;color:#cbc2b0;border-top:1px solid #506149;
+ padding-top:20px;margin-top:3px;
+}
+.sc-about-gatherings {
+ max-width:1500px;margin:auto;padding:35px 7.5vw 85px;
+ border-top:1px solid rgba(214,179,105,.3);
+}
+.sc-about-gatherings h2 {font:400 clamp(38px,4.3vw,64px)/1.08 Georgia,serif;color:#f5ecda;margin:12px 0 30px}
+.sc-about-event-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}
+.sc-about-event {border-top:1px solid rgba(214,179,105,.25);padding-top:20px}
+.sc-about-event h3 {color:#f5ecda;font-size:clamp(24px,2.5vw,36px);margin:8px 0}
+.sc-about-event>p:not(.eyebrow) {color:#d8d0c0;font-size:15px;line-height:1.6;margin:0 0 12px}
+@media(max-width:800px) {
+ .sc-about-intro {grid-template-columns:1fr;gap:32px;padding:45px 6vw 65px}
+ .sc-about-photo {max-width:560px}
+ .sc-about-content h1 {font-size:clamp(52px,12vw,80px);margin:15px 0 23px}
+ .sc-about-gatherings {padding:30px 6vw 60px}
+ .sc-about-event-grid {grid-template-columns:1fr;gap:25px}
+}
