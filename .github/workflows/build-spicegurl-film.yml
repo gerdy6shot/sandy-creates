@@ -19,6 +19,12 @@ jobs:
         with:
           persist-credentials: true
 
+      - name: Install FFmpeg for rendering
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          ffprobe -version
+
       - name: Render 16:9 single-shot film from approved footage
         run: python3 scripts/build-spicegurl-film.py
 
