@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, FileText, LayoutDashboard, LogOut, MessageSquare, Package, Settings, ShoppingBag, SlidersHorizontal } from 'lucide-react';
-import { sandySupabase, OWNER_EMAIL } from '../lib/sandy-supabase';
+import { sandySupabase } from '../lib/sandy-supabase';
 import { money } from '../lib/cart';
 
 type LiveVariant={id:string;product_id:string;size:string;sku:string;price:number;inventory:number;active:boolean};
@@ -36,7 +36,7 @@ async function isOwnerAuthorized(){
 
 export function OwnerLogin(){
  const navigate=useNavigate();const [sending,setSending]=useState(false);
- const [message,setMessage]=useState('');const [checking,setChecking]=useState(true);
+ const [message,setMessage]=useState('');const [checking,setChecking]=useState(true);const [email,setEmail]=useState('');
  useEffect(()=>{let mounted=true;void isOwnerAuthorized().then(allowed=>{
   if(mounted){setChecking(false);if(allowed)navigate('/admin',{replace:true});}
  }).catch(()=>{if(mounted)setChecking(false);});
@@ -45,7 +45,7 @@ export function OwnerLogin(){
   event.preventDefault();if(sending)return;setSending(true);setMessage('');
   try{
    const {error}=await sandySupabase.auth.signInWithOtp({
-    email:OWNER_EMAIL,
+    email:email.trim().toLowerCase(),
     options:{emailRedirectTo:window.location.origin+'/admin',shouldCreateUser:true},
    });
    if(error)throw error;
@@ -58,8 +58,7 @@ export function OwnerLogin(){
   <h1>Welcome<br/><i>back.</i></h1>
   <p>Secure owner access to products, orders, inquiries, and website content.</p>
   {checking?<p role="status">Checking your session…</p>:<form className="studio-panel editor-form" onSubmit={e=>void sendLink(e)}>
-   <p className="eyebrow">OWNER EMAIL</p>
-   <p>{OWNER_EMAIL}</p>
+   <label className="editor-form" htmlFor="owner-sign-in-email">OWNER EMAIL<input id="owner-sign-in-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="Your authorized email address" /></label>
    <p className="small-copy">A secure email link signs you in. No password is shared with the website or stored in source code.</p>
    <button type="submit" className="button" disabled={sending}>{sending?'Sending…':'Email my secure sign-in link'} <ArrowUpRight size={16}/></button>
    <p role="status" aria-live="polite">{message}</p>
@@ -71,7 +70,7 @@ export function OwnerLogin(){
 export default function OwnerAdmin(){
  const navigate=useNavigate();const location=useLocation();
  const section=location.pathname.split('/')[2]??'';
- const [authorized,setAuthorized]=useState(false);
+ const [authorized,setAuthorized]=useState(false);const [ownerEmail,setOwnerEmail]=useState('');
  const [checking,setChecking]=useState(true);
  const [busy,setBusy]=useState(false);
  const [status,setStatus]=useState('');
@@ -88,6 +87,7 @@ export default function OwnerAdmin(){
  useEffect(()=>{let mounted=true;
   void isOwnerAuthorized().then(ok=>{
    if(!mounted)return;setChecking(false);setAuthorized(ok);
+   if(ok)void sandySupabase.auth.getUser().then(({data})=>{if(mounted)setOwnerEmail(data.user?.email??'');});
    if(!ok)navigate('/admin/login',{replace:true});
   }).catch(()=>{if(mounted){setChecking(false);navigate('/admin/login',{replace:true});}});
   return ()=>{mounted=false;};
@@ -268,7 +268,7 @@ export default function OwnerAdmin(){
     <label>Public availability message<textarea value={availability.message} onChange={e=>setAvailability({...availability,message:e.target.value})}/></label>
     <button className="button" disabled={busy}>Save availability</button>
    </form>}
-   {section==='settings'&&<section className="studio-panel"><h2>Owner account</h2><p>Signed in as {OWNER_EMAIL}. Database access is restricted by verified email and administrator authorization.</p><p>Products, orders, inquiries and uploaded product photographs are stored in Supabase with Row Level Security.</p><button className="button secondary" type="button" onClick={()=>void signOut()}>Sign out</button></section>}
+   {section==='settings'&&<section className="studio-panel"><h2>Owner account</h2><p>Signed in as {ownerEmail || 'verified owner'}. Database access is restricted by verified identity and administrator authorization.</p><p>Products, orders, inquiries and uploaded product photographs are stored in Supabase with Row Level Security.</p><button className="button secondary" type="button" onClick={()=>void signOut()}>Sign out</button></section>}
   </section>
  </div>;
 }
