@@ -22,6 +22,7 @@ export default function SpiceGurlReactions() {
   const [failedVideos, setFailedVideos] = useState<string[]>([]);
   const [soundIndex, setSoundIndex] = useState<number | null>(null);
   const [pausedVideos, setPausedVideos] = useState<number[]>([]);
+  const [manuallyPlaying, setManuallyPlaying] = useState<number[]>([]);
   const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function SpiceGurlReactions() {
       for (const entry of entries) {
         const video = entry.target as HTMLVideoElement;
         const index = players.current.indexOf(video);
-        if (entry.intersectionRatio >= 0.45 && !document.hidden && !reducedMotion && !pausedVideos.includes(index)) {
+        if (entry.intersectionRatio >= 0.45 && !document.hidden && (!reducedMotion || manuallyPlaying.includes(index)) && !pausedVideos.includes(index)) {
           void video.play().catch(() => { /* Browser policies may block autoplay. */ });
         } else video.pause();
       }
@@ -48,7 +49,7 @@ export default function SpiceGurlReactions() {
       if (document.hidden) videos.forEach(video => video.pause());
       else videos.forEach(video => {
         const bounds = video.getBoundingClientRect();
-        if (bounds.bottom > 0 && bounds.top < window.innerHeight && !reducedMotion && !pausedVideos.includes(players.current.indexOf(video))) {
+        if (bounds.bottom > 0 && bounds.top < window.innerHeight && (!reducedMotion || manuallyPlaying.includes(players.current.indexOf(video))) && !pausedVideos.includes(players.current.indexOf(video))) {
           void video.play().catch(() => {});
         }
       });
@@ -60,13 +61,14 @@ export default function SpiceGurlReactions() {
       document.removeEventListener('visibilitychange', onVisibility);
       videos.forEach(video => video.pause());
     };
-  }, [pausedVideos, reducedMotion]);
+  }, [pausedVideos, reducedMotion, manuallyPlaying]);
 
   function togglePlayback(index: number) {
     const player = players.current[index];
     if (!player) return;
-    const currentlyPaused = pausedVideos.includes(index);
+    const currentlyPaused = pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index));
     setPausedVideos(items => currentlyPaused ? items.filter(item => item !== index) : [...items, index]);
+    setManuallyPlaying(items => currentlyPaused ? [...new Set([...items, index])] : items.filter(item => item !== index));
     if (currentlyPaused) void player.play().catch(() => {});
     else player.pause();
   }
@@ -104,7 +106,7 @@ export default function SpiceGurlReactions() {
             {video && !failedVideos.includes(video.src) ? <>
               <video ref={el => { players.current[index] = el; }} src={video.src} poster={card.photo} autoPlay={!reducedMotion && !pausedVideos.includes(index)} muted loop playsInline preload={reducedMotion ? 'none' : 'metadata'}
                 aria-label={video.label} onError={() => setFailedVideos(items => [...items, video.src])}/>
-              <button type="button" className="sc-reactions__pause" aria-label={pausedVideos.includes(index) || reducedMotion && players.current[index]?.paused ? `Play ${video.label}` : `Pause ${video.label}`}
+              <button type="button" className="sc-reactions__pause" aria-label={pausedVideos.includes(index) || (reducedMotion && !manuallyPlaying.includes(index)) ? `Play ${video.label}` : `Pause ${video.label}`}
                 aria-pressed={pausedVideos.includes(index)} onClick={() => togglePlayback(index)}>{pausedVideos.includes(index) || reducedMotion && players.current[index]?.paused ? <Play size={18}/> : <Pause size={18}/>}</button>
               <button type="button" className="sc-reactions__sound" aria-label={soundIndex === index ? `Mute ${video.label}` : `Enable sound for ${video.label}`}
                 aria-pressed={soundIndex === index} onClick={() => toggleSound(index)}>{soundIndex === index ? <Volume2 size={18}/> : <VolumeX size={18}/>}</button>
