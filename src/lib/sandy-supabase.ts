@@ -1,11 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-// These are PUBLIC browser connection parameters, not privileged credentials.
-// Authentication and database RLS enforce authorization on every request.
-const url = import.meta.env.VITE_SUPABASE_URL || 'https://ncphseqscanghqdgzetf.supabase.co';
-const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "sb_publishable_vA0-xhnHkt8BU2rQdZBc_w_nMDFhaAk";
-
+// Vite embeds these public connection values at build time.
+// Supabase RLS and verified user authorization protect data, not the public key.
+const url: string | undefined = import.meta.env.VITE_SUPABASE_URL;
+const key: string | undefined = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+if (!url || !/^https:\/\/[^/]+\.supabase\.co\/?$/.test(url) || !key?.startsWith('sb_publishable_')) {
+ throw new Error('Sandy Creates Supabase build configuration is missing or invalid.');
+}
 export const sandySupabase = createClient(url, key, {
-  auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+ auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true },
 });
-export const OWNER_EMAIL = 'becomeunfazed@gmail.com';
