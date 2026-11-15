@@ -72,3 +72,7 @@ The three supplied product images replace the original fictional catalog in the 
 ## Confirmed profile and education
 
 `src/data/profile.ts` is the reusable profile source. The owner confirmed a bachelor’s degree in Culinary Arts from Johnson & Wales University. It appears once in the About narrative and once briefly in the Home introduction; there are no credential badges or sitewide repetitions. No BS/BA designation, graduation date, coursework or academic achievements are inferred. The same source contains a reusable professional bio, also supplied in `docs/PROFESSIONAL-BIO.md`. The new portrait comes from IMG_6734.jpg, preserved in `public/images/sandy/profile.jpg`, and replaces the Home/About placeholder artwork.
+
+## Spice Gurl single-screen film (November 15, 2026)
+
+The homepage's **People Are LOVING SPICE GURL** section uses one edited 16:9 film in the existing player, not a gallery or three-panel montage. The edit is generated from four existing approved Spice Gurl clips by `python3 scripts/build-spicegurl-film.py`. The source recordings remain unchanged. Media files: `public/videos/spicegurl-reactions/spicegurl-cinematic-single-screen.mp4` and `spicegurl-cinematic-poster.jpg`. The player continues to support muted autoplay, looping, pause, sound, and reduced-motion preferences.
