@@ -10,7 +10,7 @@ A NEW, standalone Sandy Creates application. No code, assets, credentials, datab
 
 Cloudflare Pages publishes the React 19 / TypeScript / Vite storefront from `main`. Public product catalog, featured prices, published website copy and published events are read from the dedicated Supabase project `ncphseqscanghqdgzetf`. The secured `/admin` routes use Supabase Auth with private owner authorization in the database. The old demo studio is retired. Existing approved Sandy photographs and editorial styling are unchanged.
 
-**Not launched:** public contact inquiries, payment checkout, inventory reservation/fulfillment, notification emails and scheduler. The public preorder flow is email-draft only. Do not enable live payments from the website without the operations and security checks.
+**Ordering:** Spice Gurl customers can build an **email preorder request** from published catalog products. There is no public shopping bag or payment checkout. The request opens the customer's email app addressed to `info@spicegurl.store`; the customer must press Send. Sandy confirms acceptance and fulfillment directly. **Not launched:** public contact submissions, online payment, stock reservations, automated emails or a scheduler.
 
 The owner must complete the first verified Supabase Auth sign-in before access is usable; an empty Auth Users list is not a working owner login.
 
@@ -35,9 +35,9 @@ npm run preview
 
 - `src/pages/OwnerAdmin.tsx` — active protected owner studio and email-link sign-in.
 - `src/lib/sandy-supabase.ts` — public Supabase client with required build-time configuration.
-- `src/lib/store.tsx` — published database catalog/content/events; bag remains browser-local.
+- `src/lib/store.tsx` — published database catalog/content/events; older cart state is retained internally but is no longer a public shopping path.
 - `src/data/demo.ts` — historical presentation reference data, **not** the live catalog.
-- `src/lib/preorder-request.ts` — builds email-only preorder drafts; does not create orders.
+- `src/lib/preorder-request.ts` and `src/components/PreorderStorefront.tsx` — the sole public ordering path: customer-selected products, integer-cent estimates and editable `mailto:` draft. Does not send email or create orders.
 - `server/api.ts`, `functions/api/` — prepared gated functions; inquiries, notifications, and checkout are **not enabled**.
 - `supabase/migrations/` — **all six exact applied remote migrations**, with timestamped versions matching the Supabase migration history. See `supabase/README.md` for restoration limits and provenance.
 - `docs/ADMIN-GUIDE.md` — real owner portal behavior and remaining limitations.

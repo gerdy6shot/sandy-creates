@@ -1,33 +1,26 @@
-# Spice Gurl email preorder storefront
+# Spice Gurl — Email Preorder (customer ordering path)
 
-The storefront reuses the supplied SofriDOBO, Sol Shine and Yardie Glaze photographs. Customers select quantities, review an email draft, and send their preorder request to info@spicegurl.store from their own email app. A copy-request fallback supports customers without a configured email app. Nothing is submitted automatically by the website.
+**Production:** https://sandcreates.com/spice-gurl#preorder-storefront  
+**Recipient:** `info@spicegurl.store` (from Sandy's published business card)
 
-## Published prices
+There is **no regular online checkout**. The website lets visitors select currently published products and quantities, review an estimated subtotal, then **open their own email application with a prepared preorder request addressed to Sandy**. The customer must click Send in their email app. The website does not deliver email automatically, process payment, store customer details, create an order record, or reserve stock.
 
-Source: https://www.spicegurl.store/, inspected October 23, 2026. Published USD prices:
+## Customer journey
 
-- SofriDOBO: $12.00.
-- Sol Shine Sauce (Sol Shine in this repository): $10.00.
-- Yardie Glaze: $14.00.
+1. Choose **Email Preorder** in the header or **Preorder** from Spice Gurl product links.
+2. Select products and quantities. Products with published positive prices appear in the selector.
+3. Review quantities and estimated product subtotal.
+4. Choose **Email preorder to Sandy** to open an editable email with the products, prices, quantities, total and confirmation request.
+5. Send the message from the customer's email account. Sandy replies to confirm sizes, availability, actual cost, taxes, delivery/pickup or shipping terms, and acceptance. A sent email is **not** a confirmed order.
 
-Net weights/bottle sizes and preorder fulfillment dates were not specified in the inspected landing page or product descriptions. Sandy confirms those details, availability, final price and pickup/shipping arrangements directly. Product subtotals are explicitly estimates, excluding taxes and fulfillment costs. No sizes are inferred from photographs.
+A copy-request fallback is available if the customer lacks a configured email app. No success screen or confirmation is shown by the website. Preorder selections are in page memory and reset on reload.
 
-## Behavior
+Legacy `/cart`, `/checkout/success` and `/checkout/cancel` routes redirect to the email preorder collection. Product detail buttons preselect the selected product in the same collection. The old demonstration shopping bag and its disabled checkout are no longer shown to visitors.
 
-- Original product imagery, category filters, quantities from 1–99, removal, and integer-cent subtotal calculations.
-- Desktop selection summary and mobile shortcut to the preorder summary.
-- Selections survive category filtering and reset on reload. They remain separate from the demo shopping bag.
-- Review opens a read-only draft containing canonical product names, selected quantities, published unit prices, estimated subtotal and a request for Sandy to confirm the remaining details. No website customer-data form or browser persistence is introduced.
-- “Open email draft” opens a `mailto:` link. The customer adds their name/notes and sends it themselves. The UI does not claim the message was sent or the order was accepted.
-- The storefront banner and product detail entry points explain email preorders. Other pages retain their existing preview behavior.
-- Sandy Creates remains the parent brand and Spice Gurl its featured product brand.
+## Data and limitations
 
-## Payment boundary
+Published price estimates come from the Supabase product variants rather than legacy hardcoded demo data. Email draft prices are calculated in integer cents. Website checkout/payment acceptance, public inquiry submission, inventory reservations, automated emails, and the background job scheduler remain disabled.
 
-Payment collection is deferred at the user's request. No Stripe setup, server endpoint, authentication, database, live checkout, stock reservation or order-confirmation changes are included. Emailing a request does not confirm an order or reserve inventory.
+**Verification still needed:** Send a real test email from a customer mailbox to `info@spicegurl.store` and confirm its receipt, reply workflow and fulfillment instructions. Mailto behavior depends on the visitor's device/email application, so retain the visible recipient and copy-request fallback. The customer should verify receipt and agreed details directly with Sandy.
 
-## Verification
-
-Typecheck, lint, production build and all 22 tests passed. The email-specific tests check canonical quantities/prices, estimated totals, encoding and invalid selections. Browser review checks original images, filters, $34.00 for two SofriDOBO plus one Sol Shine, the recipient and encoded email body, empty-selection behavior and mobile overflow. No test email was sent.
-
-Branch: `feature/spice-gurl-preorders`. Commits use `[CF-Pages-Skip]` to preserve review before deployment. No merge or deployment has been performed.
+Product photos and approved website design have not changed for this update.
