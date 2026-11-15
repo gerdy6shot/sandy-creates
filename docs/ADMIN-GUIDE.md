@@ -1,13 +1,19 @@
-# Sandy Creates — demo studio guide
+# Sandy Creates — OWNER portal
 
-Open `/admin/login`, then **Explore the demo studio**. This is an intentionally public demonstration workspace with fictional records, not a protected production account. Never enter customer data. Edits stay in this browser and are isolated from production.
+Production URL: https://sandcreates.com/admin/login
+Supabase project: ncphseqscanghqdgzetf
 
-- **Products:** create a sample, edit descriptions, ingredients, allergens and storage, add size variants, change whole-cent sample prices and stock, publish/unpublish, feature, and preview images. Only JPEG/PNG/WebP under 2 MB are accepted. Demo fulfillment toggles never enable checkout.
-- **Orders:** the empty state reflects no connected order data. There is no manual “mark paid” control.
-- **Availability:** pause demo bag additions, configure provisional timezone, capacity, lead time, blocked dates, pickup-window notes and the public culinary message. Culinary checkout stays closed.
-- **Inquiries:** filter the fictional record, change its status, and add demo notes. Public contact forms do not create records.
-- **Events:** create, edit and publish clearly marked sample experiences. Leave dates empty rather than inventing real events. No paid reservations.
-- **Website content:** edit draft homepage headline, introduction, story and philosophy. All are editable concepts, not approved Sandy quotations.
-- **Settings:** edit the response message and reset the demo, clearing local changes and bag items.
+This is the protected **live OWNER** portal, not the historical Demo Studio. A verified Supabase Auth email-link login is required. Database-side private membership is also required before any administrative data can be read or changed.
 
-When live administration is implemented, use Supabase Auth with explicit admin UUID provisioning. Authentication alone is insufficient: database RLS checks `private.admin_roles`. The adapter includes an explicit authorization RPC. Do not connect the demo workspace directly to customer records. Production admin data loading, saves, error handling and session expiry remain integration work.
+The first authorized owner sign-in must be completed in the email inbox; deployment alone does **not** create an Auth user. An authorized owner email is checked server-side and must be verified before a private admin-role row is automatically provisioned. Never commit credentials, manually mark email verification without proof, or grant an owner role to an arbitrary user.
+
+Sections:
+- **Products:** edit names, descriptions, prices, inventory, published/featured state and original photo uploads. Changes live in Supabase. Image and variant operations are currently multi-step, not transactional; verify the result if any operation errors.
+- **Orders and inquiries:** show only real rows. Public submissions and checkout are not enabled; empty lists are expected. Payment status is not directly editable.
+- **Events:** manage owner records, publish when content is approved. The public site requests only the published event fields and never exposes private location.
+- **Content / Availability:** manage published copy, dates and catalog pauses. Turning off a pause does not turn on checkout.
+- **Settings:** authenticated session info and sign-out.
+
+The owner login currently uses Supabase email-link enrollment to bootstrap the verified owner. Review and disable general public signup after the first verified Auth user is created; enforce MFA if the project and desired login path support it. Authentication, upload, CRUD, and RLS still require a live owner-session acceptance test.
+
+**Operations:** No scheduler is connected to `runMaintenance`; no payment or customer notification should be considered active. Do not use demo data as customer records.

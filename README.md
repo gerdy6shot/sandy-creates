@@ -6,11 +6,13 @@ Source repository: https://github.com/gerdy6shot/sandy-creates
 
 A NEW, standalone Sandy Creates application. No code, assets, credentials, database project or deployment from the earlier Cynthia Horner project is reused.
 
-## Current release
+## Current release (live on sandcreates.com)
 
-Presentation demo: complete public routes, Spice Gurl product showcase with supplied photographs, persistent demo bag, culinary inquiry pathways, experiences empty states, contact validation, policy drafts and an editable local demo studio. The shipped UI ALWAYS uses synthetic demo data. It does not take payments, save inquiries, subscribe emails or access live customer records. The persistent preview banner makes this explicit.
+Cloudflare Pages publishes the React 19 / TypeScript / Vite storefront from `main`. Public product catalog, featured prices, published website copy and published events are read from the dedicated Supabase project `ncphseqscanghqdgzetf`. The secured `/admin` routes use Supabase Auth with private owner authorization in the database. The old demo studio is retired. Existing approved Sandy photographs and editorial styling are unchanged.
 
-React 19, TypeScript, Vite 7, React Router, Tailwind 4, custom editorial design tokens, and Lucide icons. npm and package-lock.json. Node 22.17+ recommended (tests use Node's experimental TypeScript stripping).
+**Not launched:** public contact inquiries, payment checkout, inventory reservation/fulfillment, notification emails and scheduler. The public preorder flow is email-draft only. Do not enable live payments from the website without the operations and security checks.
+
+The owner must complete the first verified Supabase Auth sign-in before access is usable; an empty Auth Users list is not a working owner login.
 
 ## Local setup
 
@@ -19,7 +21,7 @@ npm ci
 npm run dev
 ```
 
-No environment variables are needed for the demo. `.env.example` lists future browser publishable configuration and server-only secret names, with no credentials.
+The required public Supabase URL and publishable key are supplied at build time by `.env.production` (public values only). `.env.example` documents the required names and server-only settings. Never expose server secrets through `VITE_`.
 
 ```sh
 npm run typecheck   # browser + prepared server adapter
@@ -31,20 +33,15 @@ npm run preview
 
 ## Source map
 
-- `src/pages/` — public pages and local demo studio.
-- `src/components/` — navigation, footer, image treatments, shared controls.
-- `src/lib/models.ts` — typed products, variants, culinary offerings, events, settings and demo records.
-- `src/data/demo.ts` — isolated sample content, products/prices and a fictional inquiry. No production seed is automatically inserted.
-- `src/lib/store.tsx` — browser-only demo storage. Real inquiries are NEVER stored in browser storage.
-- `src/lib/cart.ts` — integer-money calculations, quantities and stock clamps. Browser totals are never authoritative for payment.
-- `src/lib/live-adapter.ts` — prepared Supabase client, authenticated-admin check and saved-inquiry response contract; not enabled in UI.
-- `server/api.ts`, `server/security.ts`, `functions/api/[[path]].ts` — prepared Cloudflare Pages Functions integration, server validation, origin checks, Turnstile verification, DB-backed throttling, verified Stripe webhook, notification queue runner and reservation cleanup.
-- `supabase/migrations/` — versioned schema prepared with the official CLI, verified in local PGlite only. NOT applied to Supabase.
-- `tests/` — meaningful invariant and permission checks. PGlite tests stub Supabase's auth/storage schemas; they do not replace staging Auth/Storage tests.
-- `docs/assets.json` — stock-photo source/license credits. Stock is mood imagery, not Sandy's work.
-- `docs/ADMIN-GUIDE.md` — demo workflows and live-admin limitations.
-- `docs/LAUNCH-REVIEW.md` — explicit remaining integrations and owner approvals.
-- `docs/VERIFICATION.md` — actual checks and limits.
+- `src/pages/OwnerAdmin.tsx` — active protected owner studio and email-link sign-in.
+- `src/lib/sandy-supabase.ts` — public Supabase client with required build-time configuration.
+- `src/lib/store.tsx` — published database catalog/content/events; bag remains browser-local.
+- `src/data/demo.ts` — historical presentation reference data, **not** the live catalog.
+- `src/lib/preorder-request.ts` — builds email-only preorder drafts; does not create orders.
+- `server/api.ts`, `functions/api/` — prepared gated functions; inquiries, notifications, and checkout are **not enabled**.
+- `supabase/migrations/` — original schema source; **remote migrations were applied** and are separately tracked by Supabase. The historical SQL is a one-time baseline, not safely re-runnable.
+- `docs/ADMIN-GUIDE.md` — real owner portal behavior and remaining limitations.
+- `.github/workflows/verify-owner-portal.yml` — typecheck, lint, tests and build on main/PRs.
 
 ## Content and assets
 
@@ -52,25 +49,17 @@ All copy is editable draft, not Sandy's approved quotations. SofriDOBO, Sol Shin
 
 Replace stock images in `public/images/` with approved images and update meaningful alt text. Product photo previews in the demo studio accept JPEG/PNG/WebP under 2 MB; production bucket restrictions are also prepared. Never upload private images to the proposed public product-image bucket.
 
-## Supabase and server deployment
+## Supabase and operational status
 
-Use a **dedicated Sandy Creates** project; none is configured or assumed. Review migration against existing schema before applying. The proposed schema separates products/variants, orders/items, stock reservations, private admin membership, availability, inquiries, jobs and processed payment events. Public grants/RLS expose only published catalog/content and availability; private records remain admin-only. No public role assignment. Payment state cannot be manually changed by admin clients.
+**Connected project:** `ncphseqscanghqdgzetf` — https://supabase.com/dashboard/project/ncphseqscanghqdgzetf
 
-Provision a specific admin user's UUID into `private.admin_roles` using trusted SQL only after the user exists. Service-role keys belong only in server secrets. The single security-definer helper reads explicit admin membership with fixed search_path; public mutation functions are security invoker and service-role only.
+Applied remote migrations include `sandy_creates_core`, `sandy_creates_verified_owner_bootstrap`, `sandy_creates_existing_catalog_seed`, and `sandy_creates_published_events_access`. The storefront reads published products, product variants, product photos, site copy, availability and approved public event fields. RLS protects private orders, inquiries, admin roles and storage modifications. Event locations are private.
 
-`server/api.ts` is prepared but not deployed by the static Sites preview. `POST /api/inquiries` saves only after server validation, origin/Turnstile verification, rate-limit RPC and a successful DB transaction; it returns saved:false on failure. The frontend widget and live wiring remain launch gates. The demo form only validates locally and states nothing was sent.
+The owner sign-in sends a Supabase email OTP/magic link. Only a verified Auth user matching the server-side authorized owner identity can be provisioned an admin role. Sign-up restrictions should be tightened **after** the first owner account has been provisioned and tested; public sign-ups still require review. MFA for the owner is recommended.
 
-Retail reservation RPC locks variants in deterministic order, snapshots trusted prices, deducts stock atomically and holds for 35 minutes. The draft Stripe helper creates card-only sessions lasting 30 minutes with order-based idempotency. A webhook commits reservations and deduplicates events in one DB transaction; late payment after released stock becomes paid/needs_review and must be manually resolved/refunded. Inventory is not deducted twice. Checkout remains disabled until fulfillment, taxes and lookup rules are complete. Culinary capacity checkout is intentionally unimplemented/disabled.
+**Disabled:** checkout, payment capture and inquiry submission. The maintenance runner is *defined but not scheduled*. Configure and test a dedicated protected schedule only when email/checkout go live. The remote baseline migration is not idempotent: do not rerun it against an existing project. Commit additive forward-only migrations, test in staging, and capture rollback guidance for each new migration. Production deployments use GitHub `main` and Cloudflare Pages.
 
-Notification jobs are saved transactionally with inquiries or payments. `runMaintenance` claims jobs with leases, uses provider idempotency and records failures without deleting business records; at most three attempts. Wire it to a protected scheduled Worker in staging. No remote schedule exists. Idempotency depends on provider retention windows and must be verified before launch.
-
-## Hosting
-
-The private Sites preview serves only the built static demo (`.openai/hosting.json`). Sites handles owner access separately from future customer/admin authentication. No custom domain has been connected.
-
-Cloudflare Pages configuration: build command `npm run build`, output `dist`, npm lockfile, Node 22. Deploy from this project root so `functions/` is included if approved. Nested routes use the native Pages SPA fallback (no top-level `404.html`); `_headers` supplies baseline headers. Configure server secrets in Pages, not VITE_ variables. Provider runtime and Pages Functions behavior require staging verification.
-
-Before enabling a live service, implement its UI integration, review operating rules, apply schema in staging, test RLS/Auth/Storage/provider webhooks, then approve launch. The preview's `robots.txt`, robots meta and X-Robots-Tag deliberately disable indexing. Production sitemap/canonical and social image require approved live routing/domain/assets; the supplied primary domain is sandycreates.com but is not connected by this release.
+**Search indexing:** noindex remains intentional before launch. Review canonical metadata, policies and business details before opening indexing.
 
 ## Product photography update
 
